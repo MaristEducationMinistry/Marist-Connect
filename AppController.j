@@ -33,7 +33,7 @@
     [theWindow setFullPlatformWindow:YES];
     
     
-    // comments from above v2
+    // comments from above v2 and v4
 }
 
 @end
