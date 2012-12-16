@@ -8,6 +8,7 @@
 
 @import <Foundation/CPObject.j>
 @import "MCLoginViewController.j"
+@import "MCTitleViewController.j"
 
 
 @implementation AppController : CPObject
@@ -17,20 +18,36 @@
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
 {
-    Parse.initialize("t1ZBJuNf6SMU3G18PWYFQJJkiaMGWAsLjcLdf6TS", "HpUfMdpaYxFhobzyXgjqw5gxvXenXA06Xb4AGTSf");
+    Parse.initialize("y7TFd6IFYR5ddsOs7xpCdoyVrKSfrSaFGqrekXYE", "uWuhcx75kue25Vm7C9kLIMo4ChJfLbsGwBQe7YQI");
+    theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask];
+    var titleViewController = [[MCTitleViewController alloc] initWithCibName:@"MCTitleViewController" bundle:nil];
+    var view = [theWindow frame];
+    [[titleViewController view] setFrame:CGRectMake(0.0,0.0,view.size.width,70.0)];
+    [[theWindow contentView] addSubview:[titleViewController view]];
+    var view = [[titleViewController view] frame];
+    window.console.log(view.size.width);
     var loginViewController = [[MCLoginViewController alloc] initWithCibName:@"MCLoginViewController" bundle:nil];
-    [theWindow setContentView:[loginViewController view]];
+    [[theWindow contentView] addSubview:[loginViewController view]];
     [loginViewController setDelegate:self];
+    [theWindow setDelegate:self];
+    [theWindow orderFront:self];
+}
+
+- (void)loginDidSucced:(id)aUser
+{
+	alert("You have been logged in: " + aUser.get("username"));
 }
 
 - (void)awakeFromCib
 {
-    // This is called when the cib is done loading.
-    // You can implement this method on any object instantiated from a Cib.
-    // It's a useful hook for setting up current UI values, and other things.
+    //[theWindow setFullPlatformWindow:YES];
+    //[theWindow setFullBridge:YES];
+}
 
-    // In this case, we want the window from Cib to become our full browser window
-    [theWindow setFullPlatformWindow:YES];
+-(BOOL)windowShouldClose:(id)window
+{
+	alert("don't even try it");
+	return false
 }
 
 @end
