@@ -31,11 +31,6 @@
 
     // In this case, we want the window from Cib to become our full browser window
     [theWindow setFullPlatformWindow:YES];
-    
-    
-    // comments from above v2 and v4
-    
-    // this is a change on the new branch
 }
 
 @end
