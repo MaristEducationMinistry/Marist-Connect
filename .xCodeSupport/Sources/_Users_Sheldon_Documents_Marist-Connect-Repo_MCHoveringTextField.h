@@ -1,7 +1,0 @@
-
-@interface MCHoveringTextField : NSTextField
-{
-
-}
-
-@end
