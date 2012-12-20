@@ -1,6 +1,7 @@
 
 @import <Foundation/Foundation.j>
 @import "MCHoveringTextField.j"
+@import "MCBackgroundView.j"
 
 
 @implementation MCLoginViewController : CPViewController
@@ -8,7 +9,9 @@
 	@outlet CPTextField usernameField;
 	@outlet CPTextField passwordField;
 	@outlet CPButton rememberButton;
+	@outlet CPImageView bgImage;
     @outlet MCHoveringTextField forgotLink;
+    @outlet MCBackgroundView background;
 	
 	id _delegate;
 }
@@ -32,6 +35,10 @@
 {
 	[forgotLink setDefaultColour:[CPColor blackColor]];
 	[forgotLink setSecondaryColour:[CPColor redColor]];
+	//[background drawBackground];
+	
+	//var image = [[CPImage alloc] initWithContentsOfFile:@"deep-textured-backround.png"];
+    //[bgImage setBackgroundColor:[CPColor colorWithPatternImage:image]];
 }
 
 @end
