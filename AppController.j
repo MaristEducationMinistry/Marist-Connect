@@ -37,7 +37,7 @@
     [[titleViewController view] setFrameOrigin:CGPointMake(0.0,0.0)];
 
     [contentView addSubview:[loginViewController view]];
-    [contentView addSubview:[titleViewController view]];
+    //[contentView addSubview:[titleViewController view]];
 
     [theWindow orderFront:self];
 }

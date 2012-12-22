@@ -1,0 +1,7 @@
+
+@interface MCFilterBarButton : NSControl
+{
+
+}
+
+@end

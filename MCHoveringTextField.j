@@ -14,12 +14,15 @@
 {
 	CPColor defaultColour;
 	CPColor secondaryColour;
+	CPString url;
 }
 
 // They have clicked us, send out a response
 - (void)mouseDown:(CPEvent)anEvent
 {
-  
+	if (url) {
+		window.open(url, "_blank");
+	}
 }
  
 // when the mouse enters we want to change the colour of the text
@@ -37,11 +40,18 @@
 - (void)setDefaultColour:(CPColor)aColour
 {
 	defaultColour = aColour;
+	[self setTextColor:defaultColour];
 }
 
 - (void)setSecondaryColour:(CPColor)aColour
 {
 	secondaryColour = aColour;
+}
+
+- (void)setURL:(CPString)aUrl
+{
+	url = [[CPString alloc] init];
+	url = aUrl;
 }
 
 @end

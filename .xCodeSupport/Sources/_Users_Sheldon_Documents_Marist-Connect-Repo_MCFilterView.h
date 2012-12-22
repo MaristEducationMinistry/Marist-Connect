@@ -1,0 +1,7 @@
+
+@interface MCFilterView : NSView
+{
+
+}
+
+@end
