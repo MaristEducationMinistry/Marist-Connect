@@ -12,11 +12,12 @@
     @outlet MCHoveringTextField forgotLink;
     @outlet MCBackgroundView background;
     @outlet CPImageView loginFormBG;
-    @outlet CPButton loginButton;
+    @outlet MCLoginGoButton loginButton;
     @outlet CPImageView loginHeaderImage;
     @outlet MCHoveringTextField privacyPolicyLink;
     @outlet MCHoveringTextField forgotLink;
     @outlet MCHoveringTextField helpLink;
+    @outlet CPImageView spinner;
 	
 	id _delegate;
 }
@@ -27,8 +28,16 @@
 }
 
 - (IBAction)performLogin:(id)aSender
-{
-	alert('yay');
+{	
+	[loginButton setHidden:YES];
+	[spinner setHidden:NO];
+	if ([usernameField stringValue] != @"" && [passwordField stringValue] != @"") {
+		[loginButton setHidden:NO];
+		[spinner setHidden:YES];
+	} else {
+		[loginButton setHidden:NO];
+		[spinner setHidden:YES];
+	}
 }
 
 - (IBAction)toggleRememberMeState:(id)aSender
@@ -48,6 +57,43 @@
 	[loginButton setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/login_go_arrow.png"]];
 	[loginHeaderImage setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/mary_image_loginView.png"]];
 	[privacyPolicyLink setURL:@"http://portal.youngmarists.org.nz/Privacy/privacyPolicy.pdf"];
+	[spinner setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/spinner.gif"]];
+	[spinner setHidden:YES];
+}
+
+@end
+
+@implementation MCLoginGoButton : CPButton
+{
+	CPImage _defaultImage @accessors;
+	CPImage _hoverImage @accessors;
+	CPImage _clickedImage @accessors;
+	SEL action;
+	id target;
+}
+
+- (void)awakeFromCib
+{
+	_defaultImage = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/login_go_arrow.png"];
+	_hoverImage = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/login_go_arrow_hover.png"];
+	_clickedImage = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/login_go_arrow_clicked.png"];
+	[self setAlternateImage:_clickedImage];
+	[self setImage:_defaultImage];
+}
+
+- (void)mouseEntered:(CPEvent)anEvent
+{
+	[self setImage:_hoverImage];
+}
+
+- (void)mouseExited:(CPEvent)anEvent
+{
+	[self setImage:_defaultImage];
+}
+
+- (void)mouseUp:(CPEvent)anEvent
+{
+	[self setImage:_hoverImage];
 }
 
 @end
