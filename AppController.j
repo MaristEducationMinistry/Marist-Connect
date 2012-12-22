@@ -10,7 +10,7 @@
 @import "MCLoginViewController.j"
 @import "MCTitleViewController.j"
 @import "MCCourseViewController.j"
-
+@import "MCFilterViewButton.j"
 
 @implementation AppController : CPObject
 {
@@ -24,22 +24,19 @@
    	var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         contentView = [theWindow contentView];
         
-    var loginViewController = [[MCLoginViewController alloc] initWithCibName:@"MCLoginViewController" bundle:nil];
-    [[loginViewController view] setFrameSize:CGSizeMake([contentView frame].size.width, [contentView frame].size.height)];
-    [[loginViewController view] setCenter:[contentView center]];
-    
-    //var courseViewController = [[MCCourseViewController alloc] initWithCibName:@"MCCourseViewController" bundle:nil];
-    //[[courseViewController view] setCenter:[contentView center]];
-    
-    var titleViewController = [[MCTitleViewController alloc] initWithCibName:@"MCTitleViewController" bundle:nil];
-    var frame = [contentView frame];
-    [[titleViewController view] setFrameSize:CGSizeMake(frame.size.width ,70)];
-    [[titleViewController view] setFrameOrigin:CGPointMake(0.0,0.0)];
-
-    [contentView addSubview:[loginViewController view]];
-    //[contentView addSubview:[titleViewController view]];
-
+    /*
+var button = [[MCFilterViewButton alloc] init];
+    window.console.log("1");
+    [button setTitle:@"test"];
+    window.console.log("1");
+    [contentView addSubview:button];
+    window.console.log("1");
     [theWindow orderFront:self];
+*/
+}
+
+-(void) awakeFromCib {
+	
 }
 
 - (void)resizeUI{}
