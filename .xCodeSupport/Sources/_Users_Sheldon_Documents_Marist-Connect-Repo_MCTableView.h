@@ -1,7 +1,0 @@
-
-@interface MCTableView : NSView
-{
-
-}
-
-@end
