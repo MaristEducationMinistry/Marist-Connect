@@ -45,7 +45,6 @@
 
 -(void) mouseDown:(CPEvent)aEvent {
 	[[self listView] rowRecievedEvent:self];
-	[self setSelected:YES];
 }
 
 -(void) drawRect:(CGRect)dirtyRect {

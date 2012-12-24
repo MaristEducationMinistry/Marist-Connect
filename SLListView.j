@@ -170,11 +170,28 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 }
 
 -(void) rowRecievedEvent:(SLListViewCell)aCell {
+	// get the row of the click
+	var newClickedRow = [_cachedViews indexOfObject:aCell];	
+	if (_clickedRow == newClickedRow) {return}
+	
+	// check if the selction should change
+	var shouldChange = YES;
+	shouldChange = [_delegate selectionShouldChangeInListview:self];
+	if (!shouldChange) {return;}
+	
+	// check if this row should be selected
+	var shouldSelectThisRow = YES;
+	shouldSelectThisRow = [_delegate listview:self shouldSelectRow:newClickedRow];
+	if (!shouldSelectThisRow) {return;}
+	
+	// looks like we can do it
 	if (_clickedRow != -1) {
 		var currentCell = [_cachedViews objectAtIndex:_clickedRow];
 		[currentCell setSelected:NO];
 	}
-	_clickedRow = [_cachedViews indexOfObject:aCell];
+	_clickedRow = newClickedRow;
+	[aCell setSelected:YES];
+	[_delegate listviewSelectionDidChange:self];
 }
 
 
