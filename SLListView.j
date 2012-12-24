@@ -29,11 +29,15 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
     int            		_numberOfRows;
     CPMutableArray      _cachedViews;
     
-    CPInteger           _clickedRow;
+    int           		_clickedRow;
     CPIndexSet          _selectedRowIndexes;
     
     BOOL                _allowsMultipleSelection;
     BOOL                _allowsEmptySelection;
+    
+    CPColor 			_highlightColor;
+    CPArray 			_gradientHighlightColors;
+    CPColor 			_dividerColor;
 
 }
 
@@ -94,10 +98,41 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 	return _delegate;
 }
 
+-(void) setHighlightColor:(CPColor)aColor {
+	_highlightColor = aColor;
+}
+
+-(CPColor) highlightColor {
+	return _highlightColor;
+}
+
+-(void) setGradientHighlightColors:(CPArray)colors {
+	if ([colors count] != 2) {
+		window.console.log("SLListView setGradientHighlightColors requires array of length 2");
+		return;
+	}
+	
+	_gradientHighlightColors = colors;
+}
+
+-(CPArray) gradientHighlightColors {
+	return _gradientHighlightColors;
+}
+
+-(void) setDividerColor:(CPColor)color {
+	_dividerColor = color;
+}
+
+-(CPColor) dividerColor {
+	return _dividerColor;
+}
+
 -(void) reloadData {
 	
 	// remove the old data and reset
-	
+	for (var x = 0; x != [_cachedViews count]; x++) {
+		[[_cachedViews objectAtIndex:x] removeFromSuperview];
+	}
 	
 	_cachedViews = [CPMutableArray array];
 	_numberOfRows = 0;
@@ -117,6 +152,7 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 		
 		// set the data
 		[view setRepresentedObject:data];
+		[view setListView:self];
 		[_cachedViews addObject:view];
 		
 		[view setFrame:CGRectMake(0, nextYPosition, width, heightOfRow)];
@@ -134,7 +170,11 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 }
 
 -(void) rowRecievedEvent:(SLListViewCell)aCell {
-	
+	if (_clickedRow != -1) {
+		var currentCell = [_cachedViews objectAtIndex:_clickedRow];
+		[currentCell setSelected:NO];
+	}
+	_clickedRow = [_cachedViews indexOfObject:aCell];
 }
 
 

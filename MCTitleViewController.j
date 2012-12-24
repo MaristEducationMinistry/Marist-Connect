@@ -47,7 +47,7 @@
 	//line
 	var bp = [[CPBezierPath alloc] init];
 	[bp setLineWidth:1.0];
-	[[CPColor blackColor] setStroke]
+	[[CPColor blackColor] setStroke];
 	[CPBezierPath strokeLineFromPoint:CGPointMake(0.0,48.0) toPoint:CGPointMake(rect.size.width, 48.0)];
 }
 
