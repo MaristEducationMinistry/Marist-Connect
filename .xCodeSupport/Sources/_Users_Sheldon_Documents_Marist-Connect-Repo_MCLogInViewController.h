@@ -12,10 +12,15 @@
     IBOutlet MCHoveringTextField* privacyPolicyLink;
     IBOutlet MCHoveringTextField* helpLink;
     IBOutlet NSImageView* spinner;
+    IBOutlet NSImageView* spinner2;
     IBOutlet NSImageView* forgotFormBG;
-    IBOutlet NSImageView* forgotHeaderImage;
     IBOutlet NSTextField* emailField;
+    IBOutlet NSView* loginView;
+    IBOutlet NSView* forgotView;
+    IBOutlet MCLoginGoButton* forgotButton;
 }
+- (IBAction)returnToLogin:(id)aSender;
+- (IBAction)performReset:(id)aSender;
 - (IBAction)performLogin:(id)aSender;
 - (IBAction)toggleRememberMeState:(id)aSender;
 @end

@@ -50,13 +50,13 @@ LPSlideViewNegativeDirection   = 4;
     id _delegate @accessors(property=delegate);
 }
 
-- (id)initWithFrame:(CPRect)aFrame
+- (id)initWithFrame:(CPRect)aFrame direction:(id)aDirection duration:(float)aDuration
 {
     if (self = [super initWithFrame:aFrame])
     {
-        animationCurve = CPAnimationEaseOut;
-        slideDirection = LPSlideViewHorizontalDirection;
-        animationDuration = 0.2;
+        animationCurve = CPAnimationEaseInOut;
+        slideDirection = aDirection;
+        animationDuration = aDuration;
         isSliding = NO;
     }
     return self;

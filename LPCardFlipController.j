@@ -72,6 +72,7 @@ var sharedCardFlipController = nil,
         DOMElement.style["-webkit-transform-style"] = @"preserve-3d";
         DOMElement.style["-webkit-perspective"] = @"600";
         
+        
         animationDuration = 0.65;
     }
     return self;
@@ -205,10 +206,10 @@ var sharedCardFlipController = nil,
                     if (_delegate && [_delegate respondsToSelector:@selector(cardFlipDidFinish:)])
                         [_delegate cardFlipDidFinish:self];
                     
-                    [containerWindow orderOut:nil];
+                    [containerWindow orderOut:self];
                 }, 1000 * animationDuration);
             }
-        
+            setTimeout(function() {[containerWindow orderOut:self];}, 1000 * animationDuration);
         }, 0);
     }
     

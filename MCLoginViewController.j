@@ -7,8 +7,11 @@
  */
 
 @import <Foundation/Foundation.j>
+@import <LPKit/LPCookieController.j>
 @import "MCHoveringTextField.j"
 @import "MCBackgroundView.j"
+@import "EKShakeAnimation.j"
+@import "LPCardFlipController.j"
 
 
 @implementation MCLogInViewController : CPViewController
@@ -26,10 +29,15 @@
     @outlet MCHoveringTextField forgotLink;
     @outlet MCHoveringTextField helpLink;
     @outlet CPImageView spinner;
+    @outlet CPImageView spinner2;
     
     @outlet CPImageView forgotFormBG;
-    @outlet CPImageView forgotHeaderImage;
     @outlet CPTextField emailField;
+    @outlet CPView loginView;
+    @outlet CPView forgotView;
+    @outlet MCLoginGoButton forgotButton;
+    
+    id cookieController;
     
 	id _delegate;
 }
@@ -39,6 +47,42 @@
 	_delegate = aDelegate;
 }
 
+- (IBAction)returnToLogin:(id)aSender
+{
+	var cardFlipController = [LPCardFlipController sharedController];
+    [cardFlipController setDelegate:self]; 
+    [cardFlipController setStartCenter:[forgotView center] endCenter:[forgotView center]];
+    [cardFlipController flipWithView:forgotView backView:loginView];
+    setTimeout(function() {[[self view] addSubview:loginView]}, 650);
+}
+
+//forgot event
+- (IBAction)performReset:(id)aSender
+{
+	[forgotButton setHidden:YES];
+	[spinner2 setHidden:NO];
+	if ([emailField stringValue] != @"") {
+		Parse.User.requestPasswordReset([emailField stringValue], {
+			success: function() {
+		    	[self returnToLogin:nil];
+		    },
+		    error: function(error) {
+		    	var animation = [[EKShakeAnimation alloc] initWithView:forgotView];
+		    	setTimeout(function() {[emailField setStringValue:@""];}, 175);
+		    	[forgotButton setHidden:NO];													  //present message for no details added
+		    	[spinner2 setHidden:YES];
+		    	//alert("Error: " + error.code + " " + error.message);
+		    }
+		});
+	} else {
+		var animation = [[EKShakeAnimation alloc] initWithView:forgotView];
+		[forgotButton setHidden:NO];													  //present message for no details added
+		[spinner2 setHidden:YES];
+	}
+	
+}
+
+
 //login event
 - (IBAction)performLogin:(id)aSender
 {	
@@ -46,30 +90,51 @@
 	[spinner setHidden:NO];															   //change images to spinning gif
 	if ([usernameField stringValue] != @"" && [passwordField stringValue] != @"") {    //check that details are entered
 		Parse.User.logIn([usernameField stringValue], [passwordField stringValue], {   //begin parse call for login
-			success: function(user) {												   //success block
+			success: function(user) {
+				if ([rememberButton state] == 1) {
+					[cookieController setValue:@"true" forKey:@"keepLoggedIn" expirationDate:[[CPDate alloc] initWithTimeIntervalSinceNow:1845504000]];
+				} else {
+					[cookieController setValue:@"false" forKey:@"keepLoggedIn" expirationDate:[[CPDate alloc] initWithTimeIntervalSinceNow:1845504000]];
+				}												 
 				[loginButton setHidden:NO];
 				[spinner setHidden:YES];
 				[_delegate userDidLogIn];
 			},
-			error: function(user, error) {											   //error block
-				alert(error.message);
+			error: function(user, error) {	
+				var animation = [[EKShakeAnimation alloc] initWithView:loginView];
+				setTimeout(function() {[usernameField setStringValue:@""]; [passwordField setStringValue:@""];}, 175);										   //error block
+				//alert(error.message);
 				[loginButton setHidden:NO];
 				[spinner setHidden:YES];
 			}
 		});
 	} else {
+		var animation = [[EKShakeAnimation alloc] initWithView:loginView];
 		[loginButton setHidden:NO];													  //present message for no details added
 		[spinner setHidden:YES];
 	}
 }
 
+- (void)showForgotPassword
+{
+	var cardFlipController = [LPCardFlipController sharedController];
+    [cardFlipController setDelegate:self];
+ 	[forgotView setHidden:NO];
+    [cardFlipController setStartCenter:[loginView center] endCenter:[loginView center]];
+    [cardFlipController flipWithView:loginView backView:forgotView];
+    setTimeout(function() {[[self view] addSubview:forgotView]}, 650);
+}
+
 - (IBAction)toggleRememberMeState:(id)aSender
 {
-	
+	alert([aSender state]);
 }
 
 - (void)awakeFromCib
 {
+	//setup cookie
+	cookieController = [LPCookieController sharedCookieController];
+	
 	//setup links
 	[forgotLink setDefaultColour:[CPColor lightGrayColor]];
 	[forgotLink setSecondaryColour:[CPColor whiteColor]];
@@ -83,13 +148,16 @@
 	[loginButton setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/login_go_arrow.png"]];
 	[loginHeaderImage setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/mary_image_loginView.png"]];
 	
-	[forgotFormBG setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/loginView_background_image.png"]];
+	[forgotFormBG setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/forgot_id_background_image.png"]];
 	//[loginButton setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/login_go_arrow.png"]];
-	[forgotHeaderImage setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/mary_image_loginView.png"]];
+	[forgotView setHidden:YES];
 	
 	[privacyPolicyLink setURL:@"http://portal.youngmarists.org.nz/Privacy/privacyPolicy.pdf"];
+	[forgotLink setAction:@selector(showForgotPassword) forTarget:self];
 	[spinner setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/spinner.gif"]];
 	[spinner setHidden:YES];
+	[spinner2 setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/spinner.gif"]];
+	[spinner2 setHidden:YES];
 }
 
 @end
@@ -115,6 +183,7 @@
 	[self setAlternateImage:_clickedImage];
 	[self setImage:_defaultImage];
 }
+
 
 - (void)mouseEntered:(CPEvent)anEvent	//mouse entered event
 {

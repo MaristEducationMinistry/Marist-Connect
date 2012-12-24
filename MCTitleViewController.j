@@ -14,6 +14,7 @@
 	@outlet CPButton logoutButton;
 	@outlet MCHoveringTextField signOutLabel;
 	@outlet MCHoveringTextField usernameLabel; 
+	@outlet CPImageView mainTitle;
 }
 
 - (void)awakeFromCib
@@ -23,15 +24,12 @@
 	[signOutLabel setSecondaryColour:[CPColor whiteColor]];
 	[usernameLabel setDefaultColour:[CPColor lightGrayColor]];
 	[usernameLabel setSecondaryColour:[CPColor whiteColor]];
+	[mainTitle setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/marist_connect_main_icon.png"]];
 }
-
-
 @end
-
 
 //gradient view subclass
 @implementation MCTitleGradientView : CPView
-
 - (void)drawRect:(CGRect)rect {
 	//gradient
 	var startPoint = CGPointMake(0, 0); 
@@ -50,5 +48,4 @@
 	[[CPColor blackColor] setStroke];
 	[CPBezierPath strokeLineFromPoint:CGPointMake(0.0,48.0) toPoint:CGPointMake(rect.size.width, 48.0)];
 }
-
 @end

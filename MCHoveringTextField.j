@@ -15,6 +15,8 @@
 	CPColor defaultColour;
 	CPColor secondaryColour;
 	CPString url;
+	id _target;
+	SEL _selector;
 }
 
 // They have clicked us, send out a response
@@ -22,7 +24,15 @@
 {
 	if (url) {
 		window.open(url, "_blank");
+	} else if (_target && _selector) {
+		[_target showForgotPassword];
 	}
+}
+
+- (void)setAction:(SEL)aSelector forTarget:(id)aTarget
+{
+	_target = aTarget;
+	_selector = aSelector;
 }
  
 // when the mouse enters we want to change the colour of the text

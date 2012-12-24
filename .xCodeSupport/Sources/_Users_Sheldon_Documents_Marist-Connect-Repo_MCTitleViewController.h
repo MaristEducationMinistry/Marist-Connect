@@ -4,6 +4,7 @@
     IBOutlet NSButton* logoutButton;
     IBOutlet MCHoveringTextField* signOutLabel;
     IBOutlet MCHoveringTextField* usernameLabel;
+    IBOutlet NSImageView* mainTitle;
 }
 
 @end

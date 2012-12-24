@@ -38,9 +38,9 @@ THE SOFTWARE.
         target       = aView;
         targetFrame  = [target frame];
         currentStep  = 1;
-        delta        = 12;
-        steps        = 9;
-        stepDuration = 0.04;
+        delta        = 20;
+        steps        = 5;
+        stepDuration = 0.07;
         timer        = [CPTimer scheduledTimerWithTimeInterval:stepDuration target:self selector:@selector(timerDidFire) userInfo:nil repeats:YES];
         
         [timer fire];    
