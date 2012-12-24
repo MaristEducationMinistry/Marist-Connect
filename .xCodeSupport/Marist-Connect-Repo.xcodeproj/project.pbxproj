@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08B7D2161687E63900644765 /* MCLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08B7D2151687E63900644765 /* MCLoginViewController.xib */; };
+		08B7D2181687E65C00644765 /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08B7D2171687E65C00644765 /* View.xib */; };
 		9EEC4498135749D200615446 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EEC4497135749D200615446 /* Cocoa.framework */; };
 		9EEC44B5135749D300615446 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EEC4497135749D200615446 /* Cocoa.framework */; };
 		9EEC44CC13574A0B00615446 /* Marist-Connect-Repo in Resources */ = {isa = PBXBuildFile; fileRef = 9EEC44CB13574A0B00615446 /* Marist-Connect-Repo */; };
@@ -23,6 +25,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		08B7D2151687E63900644765 /* MCLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MCLoginViewController.xib; path = ../Resources/MCLoginViewController.xib; sourceTree = "<group>"; };
+		08B7D2171687E65C00644765 /* View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = View.xib; path = ../Resources/View.xib; sourceTree = "<group>"; };
 		9EEC4493135749D200615446 /* Another.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Another.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EEC4497135749D200615446 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		9EEC449A135749D300615446 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -55,6 +59,8 @@
 		9EEC4488135749D200615446 = {
 			isa = PBXGroup;
 			children = (
+				08B7D2171687E65C00644765 /* View.xib */,
+				08B7D2151687E63900644765 /* MCLoginViewController.xib */,
 				9EEC44CB13574A0B00615446 /* Marist-Connect-Repo */,
 				9EEC4496135749D200615446 /* Frameworks */,
 				9EEC4494135749D200615446 /* Products */,
@@ -161,6 +167,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9EEC44CC13574A0B00615446 /* Marist-Connect-Repo in Resources */,
+				08B7D2161687E63900644765 /* MCLoginViewController.xib in Resources */,
+				08B7D2181687E65C00644765 /* View.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

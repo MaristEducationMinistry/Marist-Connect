@@ -1,0 +1,7 @@
+
+@interface LPCardFlipController : NSObject
+{
+
+}
+
+@end

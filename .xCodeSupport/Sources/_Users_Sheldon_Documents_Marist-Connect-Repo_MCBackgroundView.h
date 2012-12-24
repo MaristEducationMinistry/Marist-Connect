@@ -1,0 +1,7 @@
+
+@interface MCBackgroundView : NSView
+{
+
+}
+
+@end

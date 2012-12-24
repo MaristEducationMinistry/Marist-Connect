@@ -1,0 +1,7 @@
+
+@interface EKShakeAnimation : NSObject
+{
+
+}
+
+@end

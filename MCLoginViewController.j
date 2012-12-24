@@ -9,10 +9,9 @@
 @import <Foundation/Foundation.j>
 @import "MCHoveringTextField.j"
 @import "MCBackgroundView.j"
-@import "MCFilterView.j"
 
 
-@implementation MCLoginViewController : CPViewController
+@implementation MCLogInViewController : CPViewController
 {
 	//declaration of public variables
 	@outlet CPTextField usernameField;
@@ -28,8 +27,10 @@
     @outlet MCHoveringTextField helpLink;
     @outlet CPImageView spinner;
     
-    @outlet MCFilterView filterView; 
-	
+    @outlet CPImageView forgotFormBG;
+    @outlet CPImageView forgotHeaderImage;
+    @outlet CPTextField emailField;
+    
 	id _delegate;
 }
 
@@ -81,6 +82,11 @@
 	[loginFormBG setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/loginView_background_image.png"]];
 	[loginButton setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/login_go_arrow.png"]];
 	[loginHeaderImage setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/mary_image_loginView.png"]];
+	
+	[forgotFormBG setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/loginView_background_image.png"]];
+	//[loginButton setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/login_go_arrow.png"]];
+	[forgotHeaderImage setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/mary_image_loginView.png"]];
+	
 	[privacyPolicyLink setURL:@"http://portal.youngmarists.org.nz/Privacy/privacyPolicy.pdf"];
 	[spinner setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/spinner.gif"]];
 	[spinner setHidden:YES];

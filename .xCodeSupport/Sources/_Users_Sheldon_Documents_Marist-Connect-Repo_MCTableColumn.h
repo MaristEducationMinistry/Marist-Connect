@@ -1,0 +1,7 @@
+
+@interface MCTableColumn : NSView
+{
+
+}
+
+@end

@@ -1,0 +1,7 @@
+
+@interface SLListView : NSView
+{
+
+}
+
+@end
