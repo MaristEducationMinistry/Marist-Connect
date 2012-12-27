@@ -58,6 +58,7 @@
     _dashboardViewController = [[MCDashboardViewController alloc] initWithCibName:@"MCDashboardViewController" bundle:nil];
     [_slideView addSubview:[_dashboardViewController view]];
     
+    
 	[[CPNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeUI) name:@"CPWindowDidResizeNotification" object:nil];
 	
 	// check if the user is logged in and present the relavent view
@@ -87,6 +88,7 @@
 	Parse.User.logOut();
 	[[_titleViewController view] removeFromSuperview];
 	[_slideView removeFromSuperview];
+	[_holdingView removeFromSuperview];
 	[[theWindow contentView] addSubview:[_loginViewController view]];
 }
 
@@ -107,38 +109,30 @@
 
 -(void) gotoNewsFeed 
 {
+	[[theWindow contentView] replaceSubview:[_dashboardViewController view] with:_slideView];
 	var frame = [[theWindow contentView] frame];
-	[_slideView setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
-	alert("sliding");
-	//[_slideView addSubview:[_newsFeedViewController view]];
 	[self ensureTitleBarIsOnScreen];
+	[_slideView addSubview:[_dashboardViewController view]];
 	[_slideView slideToView:[_newsFeedViewController view] direction:LPSlideViewPositiveDirection];
-	//after timeout switch views
 	setTimeout(function() {
 		[[_newsFeedViewController view] removeFromSuperview];
 		[[_newsFeedViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
-		[[theWindow contentView] addSubview:[_newsFeedViewController view]];
-		window.console.log([[theWindow contentView] subviews]);
-	}, 700);
+		[[theWindow contentView] replaceSubview:_slideView with:[_newsFeedViewController view]];
+	}, 750);
 }
 
 -(void) gotoDashboard 
 {
+	[[theWindow contentView] replaceSubview:[_newsFeedViewController view] with:_slideView];
 	var frame = [[theWindow contentView] frame];
-	[_slideView setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
-	alert("sliding");
-	[[_newsFeedViewController view] removeFromSuperview];
-	[_slideView addSubview:[_dashboardViewController view]];
-	[_slideView addSubview:[_newsFeedViewController view]];
 	[self ensureTitleBarIsOnScreen];
+	[_slideView addSubview:[_newsFeedViewController view]];
 	[_slideView slideToView:[_dashboardViewController view] direction:LPSlideViewNegativeDirection];
-	//after timeout swith views
 	setTimeout(function() {
 		[[_dashboardViewController view] removeFromSuperview];
-		[[_dashboardViewController view] setFrameOrigin:CGPointMake(0.0, 48.0)];
-		[[theWindow contentView] addSubview:[_dashboardViewController view]];
-		window.console.log([_dashboardViewController view]);
-	}, 700);
+		[[_dashboardViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
+		[[theWindow contentView] replaceSubview:_slideView with:[_dashboardViewController view]];
+	}, 750);
 }
 
 -(void) ensureTitleBarIsOnScreen 

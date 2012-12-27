@@ -12,11 +12,9 @@
 		</object>
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<string>NSView</string>
-			<string>NSScrollView</string>
 			<string>NSCustomView</string>
-			<string>NSButtonCell</string>
-			<string>NSButton</string>
+			<string>NSScrollView</string>
+			<string>NSView</string>
 			<string>NSScroller</string>
 			<string>NSCustomObject</string>
 		</object>
@@ -57,36 +55,6 @@
 									<object class="NSView" id="833525207">
 										<reference key="NSNextResponder" ref="645204803"/>
 										<int key="NSvFlags">274</int>
-										<object class="NSMutableArray" key="NSSubviews">
-											<bool key="EncodedWithXMLCoder">YES</bool>
-											<object class="NSButton" id="407580211">
-												<reference key="NSNextResponder" ref="833525207"/>
-												<int key="NSvFlags">268</int>
-												<string key="NSFrame">{{59, 156}, {82, 32}}</string>
-												<reference key="NSSuperview" ref="833525207"/>
-												<reference key="NSWindow"/>
-												<string key="NSReuseIdentifierKey">_NS:687</string>
-												<bool key="NSEnabled">YES</bool>
-												<object class="NSButtonCell" key="NSCell" id="123105758">
-													<int key="NSCellFlags">67239424</int>
-													<int key="NSCellFlags2">134217728</int>
-													<string key="NSContents">Button</string>
-													<object class="NSFont" key="NSSupport">
-														<string key="NSName">LucidaGrande</string>
-														<double key="NSSize">13</double>
-														<int key="NSfFlags">1044</int>
-													</object>
-													<string key="NSCellIdentifier">_NS:687</string>
-													<reference key="NSControlView" ref="407580211"/>
-													<int key="NSButtonFlags">-2038284033</int>
-													<int key="NSButtonFlags2">129</int>
-													<string key="NSAlternateContents"/>
-													<string key="NSKeyEquivalent"/>
-													<int key="NSPeriodicDelay">200</int>
-													<int key="NSPeriodicInterval">25</int>
-												</object>
-											</object>
-										</object>
 										<string key="NSFrameSize">{582, 216}</string>
 										<reference key="NSSuperview" ref="645204803"/>
 										<reference key="NSWindow"/>
@@ -130,7 +98,6 @@
 								<string key="NSFrame">{{1, 232}, {597, 15}}</string>
 								<reference key="NSSuperview" ref="414493491"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:412</string>
 								<int key="NSsFlags">1</int>
 								<reference key="NSTarget" ref="414493491"/>
@@ -193,14 +160,6 @@
 					</object>
 					<int key="connectionID">9</int>
 				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">mouseLocation:</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="407580211"/>
-					</object>
-					<int key="connectionID">12</int>
-				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -262,7 +221,6 @@
 						<reference key="object" ref="833525207"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="407580211"/>
 						</object>
 						<reference key="parent" ref="414493491"/>
 					</object>
@@ -276,20 +234,6 @@
 						<reference key="object" ref="462859279"/>
 						<reference key="parent" ref="414493491"/>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">10</int>
-						<reference key="object" ref="407580211"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="123105758"/>
-						</object>
-						<reference key="parent" ref="833525207"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">11</int>
-						<reference key="object" ref="123105758"/>
-						<reference key="parent" ref="407580211"/>
-					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -300,8 +244,6 @@
 					<string>-2.IBPluginDependency</string>
 					<string>-3.IBPluginDependency</string>
 					<string>1.IBPluginDependency</string>
-					<string>10.IBPluginDependency</string>
-					<string>11.IBPluginDependency</string>
 					<string>2.IBPluginDependency</string>
 					<string>4.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
@@ -310,8 +252,6 @@
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -343,17 +283,6 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">MCNewsFeedViewController</string>
 					<string key="superclassName">NSViewController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">mouseLocation:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">mouseLocation:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">mouseLocation:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
