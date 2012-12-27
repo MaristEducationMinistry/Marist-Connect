@@ -201,4 +201,8 @@ LPSlideViewNegativeDirection   = 4;
     [self animationDidEnd];
 }
 
+- (void)mouseDown:(CPEvent)aEvent
+{
+	window.console.log("mouseDown");
+}
 @end

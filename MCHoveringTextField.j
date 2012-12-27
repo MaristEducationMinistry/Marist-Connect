@@ -25,7 +25,8 @@
 	if (url) {
 		window.open(url, "_blank");
 	} else if (_target && _selector) {
-		[_target showForgotPassword];
+		var _mainRunLoop = [CPRunLoop mainRunLoop];
+		[ _mainRunLoop performSelector:_selector target:_target argument:nil order:10 modes:[CPArray arrayWithObject:CPDefaultRunLoopMode]];
 	}
 }
 

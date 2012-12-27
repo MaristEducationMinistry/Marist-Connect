@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08587674168A6A9000138938 /* MCCourseCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08587673168A6A9000138938 /* MCCourseCellView.xib */; };
+		08587677168A6AA600138938 /* MCCourseHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08587676168A6AA600138938 /* MCCourseHeaderView.xib */; };
+		08587679168A817400138938 /* MCNewsFeedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08587678168A817400138938 /* MCNewsFeedViewController.xib */; };
 		088198B71688461500B1D1C4 /* MCDashboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088198B61688461500B1D1C4 /* MCDashboardViewController.xib */; };
 		08B7D2181687E65C00644765 /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08B7D2171687E65C00644765 /* View.xib */; };
 		9EEC4498135749D200615446 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EEC4497135749D200615446 /* Cocoa.framework */; };
@@ -25,6 +28,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		08587673168A6A9000138938 /* MCCourseCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MCCourseCellView.xib; path = ../Resources/MCCourseCellView.xib; sourceTree = "<group>"; };
+		08587676168A6AA600138938 /* MCCourseHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MCCourseHeaderView.xib; path = ../Resources/MCCourseHeaderView.xib; sourceTree = "<group>"; };
+		08587678168A817400138938 /* MCNewsFeedViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MCNewsFeedViewController.xib; path = ../Resources/MCNewsFeedViewController.xib; sourceTree = "<group>"; };
 		088198B61688461500B1D1C4 /* MCDashboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MCDashboardViewController.xib; path = ../Resources/MCDashboardViewController.xib; sourceTree = "<group>"; };
 		08B7D2171687E65C00644765 /* View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = View.xib; path = ../Resources/View.xib; sourceTree = "<group>"; };
 		9EEC4493135749D200615446 /* Another.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Another.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,6 +65,9 @@
 		9EEC4488135749D200615446 = {
 			isa = PBXGroup;
 			children = (
+				08587678168A817400138938 /* MCNewsFeedViewController.xib */,
+				08587676168A6AA600138938 /* MCCourseHeaderView.xib */,
+				08587673168A6A9000138938 /* MCCourseCellView.xib */,
 				088198B61688461500B1D1C4 /* MCDashboardViewController.xib */,
 				08B7D2171687E65C00644765 /* View.xib */,
 				9EEC44CB13574A0B00615446 /* Marist-Connect-Repo */,
@@ -169,6 +178,9 @@
 				9EEC44CC13574A0B00615446 /* Marist-Connect-Repo in Resources */,
 				08B7D2181687E65C00644765 /* View.xib in Resources */,
 				088198B71688461500B1D1C4 /* MCDashboardViewController.xib in Resources */,
+				08587674168A6A9000138938 /* MCCourseCellView.xib in Resources */,
+				08587677168A6AA600138938 /* MCCourseHeaderView.xib in Resources */,
+				08587679168A817400138938 /* MCNewsFeedViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

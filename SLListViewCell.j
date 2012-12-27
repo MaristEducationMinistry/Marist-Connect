@@ -1,4 +1,3 @@
-
 /*
  * SLListViewCell.j
  * Marist Connect

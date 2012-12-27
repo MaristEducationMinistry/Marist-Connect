@@ -82,7 +82,6 @@
 	
 }
 
-
 //login event
 - (IBAction)performLogin:(id)aSender
 {	
@@ -98,6 +97,8 @@
 				}												 
 				[loginButton setHidden:NO];
 				[spinner setHidden:YES];
+				[usernameField setStringValue:@""];
+				[passwordField setStringValue:@""];
 				[_delegate userDidLogIn];
 			},
 			error: function(user, error) {	
@@ -127,7 +128,7 @@
 
 - (IBAction)toggleRememberMeState:(id)aSender
 {
-	alert([aSender state]);
+	
 }
 
 - (void)awakeFromCib

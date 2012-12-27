@@ -12,6 +12,7 @@
 @import "MCCourseViewController.j"
 @import "MCFilterView.j"
 @import "MCDashboardViewController.j"
+@import "MCNewsFeedViewController.j"
 @import <LPKit/LPSlideView.j>
 
 
@@ -22,7 +23,7 @@
 	MCTitleViewController _titleViewController;
 	LPSlideView _slideView;
 	MCDashboardViewController _dashboardViewController;
-	
+	MCNewsFeedViewController _newsFeedViewController;
 	
 	id cookieController;
 }
@@ -43,17 +44,19 @@
     var frame = [contentView frame];
     [[_titleViewController view] setFrameSize:CGSizeMake(frame.size.width ,48)];
     [[_titleViewController view] setFrameOrigin:CGPointMake(0.0,0.0)];
+    [_titleViewController setDelegate:self];
     
     //create the slide view
-    _slideView = [[LPSlideView alloc] initWithFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0) direction:LPSlideViewVerticalDirection duration:0.7];
+    _slideView = [[LPSlideView alloc] initWithFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0) direction:LPSlideViewHorizontalDirection duration:0.7];
     [_slideView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable | CPViewMinYMargin];
     
     //create other views for slider
+    _newsFeedViewController = [[MCNewsFeedViewController alloc] initWithCibName:@"MCNewsFeedViewController" bundle:nil];
+    //[[_newsFeedViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)]
+    [_slideView addSubview:[_newsFeedViewController view]];
+    
     _dashboardViewController = [[MCDashboardViewController alloc] initWithCibName:@"MCDashboardViewController" bundle:nil];
     [_slideView addSubview:[_dashboardViewController view]];
-    //
-    [_slideView slideToView:[_dashboardViewController view] direction:nil];
-    //
     
 	[[CPNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeUI) name:@"CPWindowDidResizeNotification" object:nil];
 	
@@ -75,15 +78,24 @@
 {
 	// remove the login view from the content view
 	[[_loginViewController view] removeFromSuperview];
-	
+	[self gotoNewsFeed]
 	// move to the main dashboard
 }
 
--(void) gotoLoginView {
+- (void)logOutUser
+{
+	Parse.User.logOut();
+	[[_titleViewController view] removeFromSuperview];
+	[_slideView removeFromSuperview];
+	[[theWindow contentView] addSubview:[_loginViewController view]];
+}
+
+-(void) gotoLoginView 
+{
 	var contentView = [theWindow contentView];
 	// remove anything old off the contentView
 	var views = [contentView subviews];
-	for (var x=0; x<subviews.length; x++) {
+	for (var x=0; x<views.length; x++) {
 		[[views objectAtIndex:x] removeFromSuperview];
 	}
 	
@@ -93,15 +105,44 @@
     [contentView addSubview: [_loginViewController view]];
 }
 
--(void) gotoNewsFeed {
+-(void) gotoNewsFeed 
+{
+	var frame = [[theWindow contentView] frame];
+	[_slideView setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
+	alert("sliding");
+	//[_slideView addSubview:[_newsFeedViewController view]];
 	[self ensureTitleBarIsOnScreen];
+	[_slideView slideToView:[_newsFeedViewController view] direction:LPSlideViewPositiveDirection];
+	//after timeout switch views
+	setTimeout(function() {
+		[[_newsFeedViewController view] removeFromSuperview];
+		[[_newsFeedViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
+		[[theWindow contentView] addSubview:[_newsFeedViewController view]];
+		window.console.log([[theWindow contentView] subviews]);
+	}, 700);
 }
 
--(void) gotoDashboard {
+-(void) gotoDashboard 
+{
+	var frame = [[theWindow contentView] frame];
+	[_slideView setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
+	alert("sliding");
+	[[_newsFeedViewController view] removeFromSuperview];
+	[_slideView addSubview:[_dashboardViewController view]];
+	[_slideView addSubview:[_newsFeedViewController view]];
 	[self ensureTitleBarIsOnScreen];
+	[_slideView slideToView:[_dashboardViewController view] direction:LPSlideViewNegativeDirection];
+	//after timeout swith views
+	setTimeout(function() {
+		[[_dashboardViewController view] removeFromSuperview];
+		[[_dashboardViewController view] setFrameOrigin:CGPointMake(0.0, 48.0)];
+		[[theWindow contentView] addSubview:[_dashboardViewController view]];
+		window.console.log([_dashboardViewController view]);
+	}, 700);
 }
 
--(void) ensureTitleBarIsOnScreen {
+-(void) ensureTitleBarIsOnScreen 
+{
 	if (![[_titleViewController view] superview]) {
 		var frame = [[theWindow contentView] frame];
 		[[_titleViewController view] setFrameSize:CGSizeMake(frame.size.width ,48)];

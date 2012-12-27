@@ -11,20 +11,47 @@
 
 @implementation MCTitleViewController : CPViewController
 {
-	@outlet CPButton logoutButton;
+	@outlet CPButton changeViewButton;
 	@outlet MCHoveringTextField signOutLabel;
 	@outlet MCHoveringTextField usernameLabel; 
 	@outlet CPImageView mainTitle;
+	
+	BOOL _isNewsFeed;
+	
+	id _delegate;
+}
+
+- (void)setDelegate:(id)aDelegate
+{
+	_delegate = aDelegate;
+}
+
+- (IBAction)toggleCurrentView:(id)aSender
+{
+	if (_isNewsFeed) {
+		_isNewsFeed = false;
+		[_delegate gotoDashboard];
+	} else {
+		_isNewsFeed = true;
+		[_delegate gotoNewsFeed];
+	}
+}
+
+- (void)userShouldLogout
+{
+	[_delegate logOutUser];
 }
 
 - (void)awakeFromCib
 {
-	[logoutButton setTitle:@"Logout"];
-	[signOutLabel setDefaultColour:[CPColor lightGrayColor]];
-	[signOutLabel setSecondaryColour:[CPColor whiteColor]];
-	[usernameLabel setDefaultColour:[CPColor lightGrayColor]];
-	[usernameLabel setSecondaryColour:[CPColor whiteColor]];
+	_isNewsFeed = true;
+	[signOutLabel setDefaultColour:[CPColor whiteColor]];
+	[signOutLabel setSecondaryColour:[CPColor blackColor]];
+	[signOutLabel setAction:@selector(userShouldLogout) forTarget:self];
+	[usernameLabel setDefaultColour:[CPColor whiteColor]];
+	[usernameLabel setSecondaryColour:[CPColor blackColor]];
 	[mainTitle setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/marist_connect_main_icon.png"]];
+	[changeViewButton setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/change_view_image.png"]];
 }
 @end
 
