@@ -6,6 +6,8 @@
  * Copyright 2012, Marist Education Ministry All rights reserved.
  */
  
+ @import <Foundation/Foundation.j>
+ 
  @implementation MCCourseSelectionViewController : CPViewController {
 	 @outlet MCFilterView filterView;
 	 @outlet CPScrollView scrollView;
@@ -26,9 +28,12 @@
  }
  
  -(id) initWithUser:(id)aUser ofClass:(CPString)classname {
+ 	window.console.log("in");
 	 self = [super initWithCibName:@"MCCourseSelectionViewController" bundle:nil];
+	 window.console.log("out");
 	 if (self) {
-		 _user = aUser;
+	 	window.console.log("in again");
+		 //_user = aUser;
 		 _userClassname = classname;
 	 }
 	 return self;
@@ -79,9 +84,9 @@
 			 var courseTypeQuery = new Parse.Query(CourseType);
 			 
 			 if (_userClassname == @"Person") {
-				 courseTypeQuery.contains("peopleAllowedToEnrol", _user.get("personType").get("bitwiseCode"));
+				 //courseTypeQuery.contains("peopleAllowedToEnrol", _user.get("personType").get("bitwiseCode"));
 			 } else {
-				 courseTypeQuery.contains("institutionsAllowedToEnrol", _user.get("institutionType").get("bitwiseCode"));
+				 //courseTypeQuery.contains("institutionsAllowedToEnrol", _user.get("institutionType").get("bitwiseCode"));
 			 }
 			 
 			 var mainQuery = new Parse.Query(Course)
@@ -128,6 +133,7 @@
 				    	// there are no objects, display the empty image
 			    	} else {
 				    	// display the data
+				    	[_listView reloadData];
 			    	}
 			    },
 			    error: function(error) {
@@ -153,7 +159,7 @@
 }
 
 -(int) listview:(SLListView)list heightForRow:(int)row {
-	return row;
+	return 20;
 }
 
 -(id) listview:(SLListView)list objectForRow:(int)row {
@@ -200,6 +206,17 @@
 	}
 }
 
-
+-(void) filterBar:(MCFilterView)view itemSelectedWithIdentifier:(CPString)identifier {
+	if ([identifier isEqualToString: @"Available"]) {
+		[self setCurrentDataSource:_availableCourses];
+		
+	} else if ([identifier isEqualToString: @"Completed"]) {
+		[self setCurrentDataSource:_currentCourses];
+		
+	} else {
+		[self setCurrentDataSource:_pastCourses];
+		
+	}
+}
 
  @end
