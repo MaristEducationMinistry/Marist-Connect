@@ -15,6 +15,10 @@
 @import "MCNewsFeedViewController.j"
 @import <LPKit/LPSlideView.j>
 
+@import "SLListView.j"
+@import "SLListViewCell.j"
+@import "MCCourseCellView.j"
+
 
 @implementation AppController : CPObject
 {
@@ -26,6 +30,11 @@
 	MCNewsFeedViewController _newsFeedViewController;
 	
 	id cookieController;
+	
+	CPScrollView scrollView;
+	SLListView listview;
+    CPArray data;
+    
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
@@ -34,6 +43,7 @@
 	
 	theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         contentView = [theWindow contentView];
+/*
 
      // create the login view controller
     _loginViewController = [[MCLogInViewController alloc] initWithCibName:@"View" bundle:nil];
@@ -70,9 +80,84 @@
 		// goto the login view
 		[self gotoLoginView];
 	}
-	
+*/
+	scrollView = [[CPScrollView alloc] initWithFrame:[contentView bounds]];
+    var image = [[CPImage alloc] initWithContentsOfFile:@"Image Resources/window-noise.png"];
+    [scrollView setBackgroundColor:[CPColor colorWithPatternImage:image]];
+    
+    listview = [[SLListView alloc] initWithFrame:CGRectMakeZero()];
+    [listview setDividerColor:[CPColor colorWithHexString:@"cbcbcb"]];
+    [listview setHighlightColor:[CPColor blackColor]];
+    
+    var col1 = [CPColor colorWithHexString:@"0054a6"];
+    col1 = [col1 colorWithAlphaComponent: 0.39];
+    var col2 = [CPColor colorWithHexString:@"9fcaf4"];
+    col2 = [col2 colorWithAlphaComponent: 0.39];
+    
+    [listview setGradientHighlightColors:[CPArray arrayWithObjects: col1, col2, nil]];
+    //[listview setFrameSize:CGSizeMake(200,200)];
+    [scrollView setDocumentView:listview];
+    
+    data = [[CPArray alloc] init];
+    [data addObject:@"Header"];
+    [data addObject:@"test"];
+    [data addObject:@"another 1"];
+    [data addObject:@"Header 2"];
+    [data addObject:@"some more data"];
+    [data addObject:@"anther row"];
+    [data addObject:@"Header"];
+    [data addObject:@"test"];
+    [data addObject:@"another 1"];
+    [data addObject:@"Header 2"];
+    [data addObject:@"some more data"];
+    [data addObject:@"anther row"];
+    [data addObject:@"Header"];
+    [data addObject:@"test"];
+    [data addObject:@"another 1"];
+    [data addObject:@"Header 2"];
+    [data addObject:@"some more data"];
+    [data addObject:@"anther row"];
+    [data addObject:@"Header"];
+    [data addObject:@"test"];
+    [data addObject:@"another 1"];
+    [data addObject:@"Header 2"];
+    [data addObject:@"some more data"];
+    [data addObject:@"anther row"];
+    [data addObject:@"Header"];
+    
+    [listview setDataSource:self];
+    
+    [contentView addSubview:scrollView];
+    
     [theWindow orderFront:self];
 }
+
+-(int) numberOfRowsInListView:(SLListView)list {
+	return [data count];
+}
+
+-(int) listview:(SLListView)list heightForRow:(int)row {
+	return 45;
+}
+
+-(id) listview:(SLListView)list objectForRow:(int)row {
+	return [data objectAtIndex:row];
+}
+
+-(CPView) listview:(SLListView)list viewForRow:(int)row {
+	var view = [[SLListViewCell alloc] init];
+	if (row % 2 == 0) {
+		//[view setBackgroundColor:[CPColor blueColor]];
+	} else {
+		//[view setBackgroundColor:[CPColor redColor]];
+	}
+	
+	return view;
+}
+
+
+
+
 
 // delegate callback when the login view completes
 - (void)userDidLogIn

@@ -17,6 +17,7 @@
 }
 
 -(void) setSelected:(BOOL)selected {
+	[self setNeedsDisplay:YES];
 	if (_selected == selected) {return;}
 	_selected = selected;
 }
@@ -48,13 +49,14 @@
 
 -(void) drawRect:(CGRect)dirtyRect {
 	// if this cell is selected we need to draw the highlight color
+	window.console.log("drawing");
 	if (_selected) {
 		// the gradient colors take priority
 		var gradientColors = [_listView gradientHighlightColors];
 		if (gradientColors) {
 			// we have a set of gradient colors, draw
-			var startPoint = CGPointMake(0, 0); 
-			var endPoint = CGPointMake(0, [self frame].size.height); 
+			var startPoint = CGPointMake(0, [self frame].size.height); // the bottom
+			var endPoint = CGPointMake(0, 0); 
 			
 			var startColor = [gradientColors objectAtIndex:0];
 			var endColor = [gradientColors objectAtIndex:1];
@@ -65,13 +67,15 @@
 			fStyle.addColorStop(0.0, "rgba("+ROUND(255*[startColor components][0])+", "+ROUND(255*[startColor components][1])+", "+ROUND(255*[startColor components][2])+", "+[startColor components][3]+")"); 
 			fStyle.addColorStop(1.0, "rgba("+ROUND(255*[endColor components][0])+", "+ROUND(255*[endColor components][1])+", "+ROUND(255*[endColor components][2])+", "+[endColor components][3]+")");
 			
-			currentContext.fillStyle = fStyle; currentContext.fillRect(0, 0, rect.size.width, rect.size.height); 
+			currentContext.fillStyle = fStyle; currentContext.fillRect(0, 0, [self frame].size.width, [self frame].size.height); 
 	
 		} else {
 			// attempt to draw a single color background
 			var highlightColor = [_listView highlightColor];
 			if (highlightColor) {
-				var path = [CPBezierPath bezierPathWithRect:[self frame]];
+				window.console.log([self frame]);
+				var size = [self frame].size;
+				var path = [CPBezierPath bezierPathWithRect:CGRectMake(0.0, 0.0, size.width, size.height)];
 				[highlightColor setFill];
 				[path fill];
 			}
@@ -81,11 +85,12 @@
 	// attempt to draw a divider
 	var dividerColor = [_listView dividerColor];
 	if (dividerColor) {
-	
+		window.console.log("drawing divider");
 		var bp = [[CPBezierPath alloc] init];
 		[bp setLineWidth:1.0];
 		[dividerColor setStroke];
-		[CPBezierPath strokeLineFromPoint:CGPointMake(0.0,48.0) toPoint:CGPointMake(rect.size.width, 48.0)];
+		var yPos = [self frame].size.height;
+		[CPBezierPath strokeLineFromPoint:CGPointMake(0.0,yPos) toPoint:CGPointMake([self frame].size.width, yPos)];
 
 	}
 }

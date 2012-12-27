@@ -130,8 +130,11 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 -(void) reloadData {
 	
 	// remove the old data and reset
-	for (var x = 0; x != [_cachedViews count]; x++) {
-		[[_cachedViews objectAtIndex:x] removeFromSuperview];
+	
+	if (_cachedViews != nil) {
+		for (var x = 0; x != [_cachedViews count]; x++) {
+			[[_cachedViews objectAtIndex:x] removeFromSuperview];
+		}
 	}
 	
 	_cachedViews = [CPMutableArray array];
@@ -158,11 +161,11 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 		[view setFrame:CGRectMake(0, nextYPosition, width, heightOfRow)];
 		[view setAutoresizingMask:CPViewWidthSizable];
 		[view setSelected:NO];
-		window.console.log(view);
+		
 		[self addSubview:view];
 		[view setNeedsDisplay:YES];
 		nextYPosition += heightOfRow;
-		window.console.log(nextYPosition);
+
 	}
 	
 	var width = [[self superview] frame].size.width;
@@ -170,18 +173,19 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 }
 
 -(void) rowRecievedEvent:(SLListViewCell)aCell {
+	window.console.log("event");
 	// get the row of the click
 	var newClickedRow = [_cachedViews indexOfObject:aCell];	
 	if (_clickedRow == newClickedRow) {return}
 	
 	// check if the selction should change
 	var shouldChange = YES;
-	shouldChange = [_delegate selectionShouldChangeInListview:self];
+	//shouldChange = [_delegate selectionShouldChangeInListview:self];
 	if (!shouldChange) {return;}
 	
 	// check if this row should be selected
 	var shouldSelectThisRow = YES;
-	shouldSelectThisRow = [_delegate listview:self shouldSelectRow:newClickedRow];
+	//shouldSelectThisRow = [_delegate listview:self shouldSelectRow:newClickedRow];
 	if (!shouldSelectThisRow) {return;}
 	
 	// looks like we can do it
@@ -191,7 +195,7 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 	}
 	_clickedRow = newClickedRow;
 	[aCell setSelected:YES];
-	[_delegate listviewSelectionDidChange:self];
+	//[_delegate listviewSelectionDidChange:self];
 }
 
 
