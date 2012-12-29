@@ -7,7 +7,13 @@
  */
 
 @import <Foundation/CPObject.j>
-//@import "SLListViewCell.j"
+@import "SLListViewCell.j"
+@import "MCCourseCellView.j"
+@import "MCCourseHeaderView.j"
+
+
+
+
 
 var SLListViewDataSource_numberOfRowsInListView_        = 1 << 0,
     SLListViewDataSource_listview_heightOfRow_          = 1 << 1,
@@ -148,7 +154,8 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 	var nextYPosition = 0;
 	var width = [self frame].size.width;
 	
-	for (var i = 0; i != _numberOfRows; i++) {
+	if (_numberOfRows != 0 || _numberOfRows != nil) {
+		for (var i = 0; i != _numberOfRows; i++) {
 		var heightOfRow = [_dataSource listview:self heightForRow:i];
 		var view = [_dataSource listview:self viewForRow:i];
 		var data = [_dataSource listview:self objectForRow:i];
@@ -165,27 +172,26 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 		[self addSubview:view];
 		[view setNeedsDisplay:YES];
 		nextYPosition += heightOfRow;
-
+		}
 	}
-	
+		
 	var width = [[self superview] frame].size.width;
 	[self setFrameSize: CGSizeMake(width, nextYPosition)];
 }
 
 -(void) rowRecievedEvent:(SLListViewCell)aCell {
-	window.console.log("event");
 	// get the row of the click
 	var newClickedRow = [_cachedViews indexOfObject:aCell];	
 	if (_clickedRow == newClickedRow) {return}
 	
 	// check if the selction should change
 	var shouldChange = YES;
-	//shouldChange = [_delegate selectionShouldChangeInListview:self];
+	shouldChange = [_delegate selectionShouldChangeInListview:self];
 	if (!shouldChange) {return;}
 	
 	// check if this row should be selected
 	var shouldSelectThisRow = YES;
-	//shouldSelectThisRow = [_delegate listview:self shouldSelectRow:newClickedRow];
+	shouldSelectThisRow = [_delegate listview:self shouldSelectRow:newClickedRow];
 	if (!shouldSelectThisRow) {return;}
 	
 	// looks like we can do it
@@ -195,9 +201,8 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 	}
 	_clickedRow = newClickedRow;
 	[aCell setSelected:YES];
-	//[_delegate listviewSelectionDidChange:self];
+	[_delegate listviewSelectionDidChange:self];
 }
-
 
 
 @end

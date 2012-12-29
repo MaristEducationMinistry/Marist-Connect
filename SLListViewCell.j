@@ -49,7 +49,6 @@
 
 -(void) drawRect:(CGRect)dirtyRect {
 	// if this cell is selected we need to draw the highlight color
-	window.console.log("drawing");
 	if (_selected) {
 		// the gradient colors take priority
 		var gradientColors = [_listView gradientHighlightColors];
@@ -85,7 +84,6 @@
 	// attempt to draw a divider
 	var dividerColor = [_listView dividerColor];
 	if (dividerColor) {
-		window.console.log("drawing divider");
 		var bp = [[CPBezierPath alloc] init];
 		[bp setLineWidth:1.0];
 		[dividerColor setStroke];

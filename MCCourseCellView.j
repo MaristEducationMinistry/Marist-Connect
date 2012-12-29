@@ -13,12 +13,29 @@
 {
 	@outlet CPTextField courseNameLabel;
     @outlet CPTextField courseDateLabel;
-    @outlet CPImageView courseCellArrow;
+    CPImageView courseCellArrow;
 }
- 
-- (void)awakeFromCib
-{
-	[courseCellArrow setImage:[CPImage initWithContentsOfFile:@"Image\ Resources/course_cell_arrow.png"]];
+
+-(void) setSelected:(BOOL)selected {
+	[super setSelected:selected];
+	if (selected) {
+		if (!courseCellArrow) {
+			courseCellArrow = [[CPImageView alloc] initWithFrame:CGRectMake(301.0, 9.0, 15.0, 21.0)];
+			[self addSubview:courseCellArrow];
+		}
+		var image = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/course_cell_arrow.png"];
+		[courseCellArrow setImage:image];
+		[courseNameLabel setTextColor:[CPColor whiteColor]];
+	} else {
+		[courseCellArrow setImage:nil];
+		[courseNameLabel setTextColor:[CPColor blackColor]];
+	}
 }
- 
+
+-(void) setRepresentedObject:(id)aRepresentedObject {
+	[super setRepresentedObject:aRepresentedObject];
+	//[courseTypeLabel setStringValue:[aRepresentedObject text]];
+	//[courseCountLabel setStringValue:[aRepresentedObject count]];
+}
+
 @end

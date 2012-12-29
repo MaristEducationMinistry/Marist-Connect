@@ -7,13 +7,21 @@
  */
  
  @import <Foundation/Foundation.j>
+ @import "SLListView.j"
+ @import "MCCourseCellView.j"
+ @import "MCCourseHeaderView.j"
+ @import "MCCourseHeaderViewController.j"
+ @import "MCCourseCellViewController.j"
  
  @implementation MCCourseSelectionViewController : CPViewController {
-	 @outlet MCFilterView filterView;
-	 @outlet CPScrollView scrollView;
+	 MCFilterView filterView;
+	 CPScrollView scrollView;
 	 
 	 @outlet EKActivityIndicatorView progressView;
 	 @outlet CPImageView emptyImage;
+	 
+	 @outlet MCCourseHeaderView listHeaderView;
+	 @outlet MCCourseCellView listCellView;
 	 
 	 SLListView _listView;
 	 
@@ -25,39 +33,77 @@
 	 
 	 Object _user;
 	 CPString _userClassname;
+	 
+	 CPArray data;
  }
  
  -(id) initWithUser:(id)aUser ofClass:(CPString)classname {
- 	window.console.log("in");
 	 self = [super initWithCibName:@"MCCourseSelectionViewController" bundle:nil];
-	 window.console.log("out");
 	 if (self) {
-	 	window.console.log("in again");
 		 //_user = aUser;
 		 _userClassname = classname;
 	 }
 	 return self;
  }
  
+/*
+ -(void) layoutSubviews {
+	window.console.log("laying out");
+	window.console.log([[self view] frame]);
+	var frame = [[self view] frame];
+	[_scrollView setFrame:CGRectMake(0,0,frame.size.width,frame.size.height)];
+	window.console.log([[_courseSelectionViewController view] frame]);
+}
+*/
+ 
  -(void) awakeFromCib {
+	 var frame = [[self view] frame];
 	 
 	 // set up the filter bar and list view
+	 filterView = [[MCFilterView alloc] initWithWidth:300.0 Buttons:nil Theme:MCFilterViewThemeDark Anchor:MCFilterViewAnchorCentre];
+	 scrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0.0, 25.0, frame.size.width, frame.size.height-25)];
+	 [scrollView setAutoresizingMask: CPViewHeightSizable];
+	 
 	 [filterView setTheme:MCFilterViewThemeDark];
 	 [filterView setAnchor:MCFilterViewAnchorCentre];
 	 [filterView setDataSource:self];
 	 [filterView setDelegate:self];
-	 
+	 [filterView reloadData];
+	  
 	 var image = [[CPImage alloc] initWithContentsOfFile:@"Image Resources/window-noise.png"];
-    [scrollView setBackgroundColor:[CPColor colorWithPatternImage:image]];
-    
+     [scrollView setBackgroundColor:[CPColor colorWithPatternImage:image]];
 	 _listView = [[SLListView alloc] initWithFrame:CGRectMakeZero()];
+	 [_listView setAutoresizingMask: CPViewWidthSizable];
+	 [_listView setDividerColor:[CPColor colorWithHexString:@"cbcbcb"]];
+     [_listView setHighlightColor:[CPColor blackColor]];
+    
+     var col1 = [CPColor colorWithHexString:@"0054a6"];
+     col1 = [col1 colorWithAlphaComponent: 0.39];
+     var col2 = [CPColor colorWithHexString:@"9fcaf4"];
+     col2 = [col2 colorWithAlphaComponent: 0.39];
+    
+    //temp datasourse
+    data = [[CPArray alloc] init];
+    [data addObject:@"Header"];
+    [data addObject:@"body"];
+    [data addObject:@"Header"];
+    [data addObject:@"body"];
+    [data addObject:@"Header"];
+    [data addObject:@"body"];
+    [data addObject:@"Header"];
+    [data addObject:@"body"];
+    [data addObject:@"Header"];
+    [data addObject:@"body"];
+    [data addObject:@"Header"];
+    [data addObject:@"body"];
+    
+     [_listView setGradientHighlightColors:[CPArray arrayWithObjects: col1, col2, nil]];
+     [scrollView setDocumentView:_listView];
+     [scrollView flashScrollers];
 	 [_listView setDataSource:self];
 	 [_listView setDelegate:self];
-	 [scrollView setDocumentView:_listView];
-	 // set the empty image
-	 
-	 // set up the progress indicator
-	 
+	 [[self view] addSubview:filterView];
+	 [[self view] addSubview:scrollView];
  }
  
  -(void) setCurrentDataSource:(CPArray) array {
@@ -144,40 +190,43 @@
 		 	 
 	 } else if ([array count] == 0) {
 		 // there are no courses in this set, display the empty image
-		 
+		 alert("empty");
 	 } else {
 		 // this data is good to go
 		 _currentDataSource = array;
 		 [_listView reloadData];
 	 }
- }
+	}
  
  // list view delegate
  
- -(int) numberOfRowsInListView:(SLListView)list {
-	return [_currentDataSource count];
+-(int) numberOfRowsInListView:(SLListView)list {
+	return [data count];
 }
 
 -(int) listview:(SLListView)list heightForRow:(int)row {
-	return 20;
+	if ((row % 2) == 0) {
+		return 25.0;
+	} else {
+		return 46.0;
+	}
 }
 
 -(id) listview:(SLListView)list objectForRow:(int)row {
-	return [_currentDataSource objectAtIndex:row];
+	//return Parse.User.current();
+	return [data objectAtIndex:row];
 }
 
 -(CPView) listview:(SLListView)list viewForRow:(int)row {
-	var view = [[SLListViewCell alloc] initWithFrame:CGRectMakeZero()];
-	if (row % 2 == 0) {
-		[view setBackgroundColor:[CPColor blueColor]];
-		[view setTempColor:[CPColor blueColor]];
+	if ((row % 2) == 0) {
+		var viewController = [[MCCourseHeaderViewController alloc] initWithCibName:@"MCCourseHeaderView" bundle:nil];
 	} else {
-		[view setBackgroundColor:[CPColor redColor]];
-		[view setTempColor:[CPColor redColor]];
+		var viewController = [[MCCourseCellViewController alloc] initWithCibName:@"MCCourseCellView" bundle:nil];
 	}
 	
-	return view;
+	return [viewController view];
 }
+
 
  
  // filter bar delegate
@@ -209,14 +258,30 @@
 -(void) filterBar:(MCFilterView)view itemSelectedWithIdentifier:(CPString)identifier {
 	if ([identifier isEqualToString: @"Available"]) {
 		[self setCurrentDataSource:_availableCourses];
-		
 	} else if ([identifier isEqualToString: @"Completed"]) {
 		[self setCurrentDataSource:_currentCourses];
-		
 	} else {
 		[self setCurrentDataSource:_pastCourses];
-		
 	}
+}
+
+- (BOOL)selectionShouldChangeInListview:(id)aListView
+{
+	return true;
+}
+
+- (BOOL)listview:(id)aListView shouldSelectRow:(int)aRow
+{
+	if ([data objectAtIndex:aRow] == "Header") {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+- (void)listviewSelectionDidChange:(id)aListView
+{
+	
 }
 
  @end

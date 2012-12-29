@@ -43,7 +43,6 @@
 	
 	theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         contentView = [theWindow contentView];
-/*
 
      // create the login view controller
     _loginViewController = [[MCLogInViewController alloc] initWithCibName:@"View" bundle:nil];
@@ -56,18 +55,18 @@
     [[_titleViewController view] setFrameOrigin:CGPointMake(0.0,0.0)];
     [_titleViewController setDelegate:self];
     
-    //create the slide view
-    _slideView = [[LPSlideView alloc] initWithFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0) direction:LPSlideViewHorizontalDirection duration:0.7];
-    [_slideView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable | CPViewMinYMargin];
-    
-    //create other views for slider
+    //create the newsfeed
     _newsFeedViewController = [[MCNewsFeedViewController alloc] initWithCibName:@"MCNewsFeedViewController" bundle:nil];
-    //[[_newsFeedViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)]
-    [_slideView addSubview:[_newsFeedViewController view]];
+    [[_newsFeedViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)]
     
+    
+    //create the dashboard
     _dashboardViewController = [[MCDashboardViewController alloc] initWithCibName:@"MCDashboardViewController" bundle:nil];
-    [_slideView addSubview:[_dashboardViewController view]];
+    [[_dashboardViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
+    [_dashboardViewController layoutSubviews];
     
+    //add dashboard to contentview
+    [[theWindow contentView] addSubview:[_dashboardViewController view]];
     
 	[[CPNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeUI) name:@"CPWindowDidResizeNotification" object:nil];
 	
@@ -80,54 +79,6 @@
 		// goto the login view
 		[self gotoLoginView];
 	}
-*/
-	scrollView = [[CPScrollView alloc] initWithFrame:[contentView bounds]];
-    var image = [[CPImage alloc] initWithContentsOfFile:@"Image Resources/window-noise.png"];
-    [scrollView setBackgroundColor:[CPColor colorWithPatternImage:image]];
-    
-    listview = [[SLListView alloc] initWithFrame:CGRectMakeZero()];
-    [listview setDividerColor:[CPColor colorWithHexString:@"cbcbcb"]];
-    [listview setHighlightColor:[CPColor blackColor]];
-    
-    var col1 = [CPColor colorWithHexString:@"0054a6"];
-    col1 = [col1 colorWithAlphaComponent: 0.39];
-    var col2 = [CPColor colorWithHexString:@"9fcaf4"];
-    col2 = [col2 colorWithAlphaComponent: 0.39];
-    
-    [listview setGradientHighlightColors:[CPArray arrayWithObjects: col1, col2, nil]];
-    //[listview setFrameSize:CGSizeMake(200,200)];
-    [scrollView setDocumentView:listview];
-    
-    data = [[CPArray alloc] init];
-    [data addObject:@"Header"];
-    [data addObject:@"test"];
-    [data addObject:@"another 1"];
-    [data addObject:@"Header 2"];
-    [data addObject:@"some more data"];
-    [data addObject:@"anther row"];
-    [data addObject:@"Header"];
-    [data addObject:@"test"];
-    [data addObject:@"another 1"];
-    [data addObject:@"Header 2"];
-    [data addObject:@"some more data"];
-    [data addObject:@"anther row"];
-    [data addObject:@"Header"];
-    [data addObject:@"test"];
-    [data addObject:@"another 1"];
-    [data addObject:@"Header 2"];
-    [data addObject:@"some more data"];
-    [data addObject:@"anther row"];
-    [data addObject:@"Header"];
-    [data addObject:@"test"];
-    [data addObject:@"another 1"];
-    [data addObject:@"Header 2"];
-    [data addObject:@"some more data"];
-    [data addObject:@"anther row"];
-    [data addObject:@"Header"];
-    
-    [listview setDataSource:self];
-    
-    [contentView addSubview:scrollView];
     
     [theWindow orderFront:self];
 }
@@ -154,10 +105,6 @@
 	
 	return view;
 }
-
-
-
-
 
 // delegate callback when the login view completes
 - (void)userDidLogIn
@@ -194,30 +141,15 @@
 
 -(void) gotoNewsFeed 
 {
-	[[theWindow contentView] replaceSubview:[_dashboardViewController view] with:_slideView];
-	var frame = [[theWindow contentView] frame];
+	[_newsFeedViewController resizeUI:[[theWindow contentView] frame]];
+	[[theWindow contentView] replaceSubview:[_dashboardViewController view] with:[_newsFeedViewController view]];
 	[self ensureTitleBarIsOnScreen];
-	[_slideView addSubview:[_dashboardViewController view]];
-	[_slideView slideToView:[_newsFeedViewController view] direction:LPSlideViewPositiveDirection];
-	setTimeout(function() {
-		[[_newsFeedViewController view] removeFromSuperview];
-		[[_newsFeedViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
-		[[theWindow contentView] replaceSubview:_slideView with:[_newsFeedViewController view]];
-	}, 750);
 }
 
 -(void) gotoDashboard 
 {
-	[[theWindow contentView] replaceSubview:[_newsFeedViewController view] with:_slideView];
-	var frame = [[theWindow contentView] frame];
+	[[theWindow contentView] replaceSubview:[_newsFeedViewController view] with:[_dashboardViewController view]];
 	[self ensureTitleBarIsOnScreen];
-	[_slideView addSubview:[_newsFeedViewController view]];
-	[_slideView slideToView:[_dashboardViewController view] direction:LPSlideViewNegativeDirection];
-	setTimeout(function() {
-		[[_dashboardViewController view] removeFromSuperview];
-		[[_dashboardViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
-		[[theWindow contentView] replaceSubview:_slideView with:[_dashboardViewController view]];
-	}, 750);
 }
 
 -(void) ensureTitleBarIsOnScreen 
@@ -228,13 +160,13 @@
 		[[_titleViewController view] setFrameOrigin:CGPointMake(0.0,0.0)];
 		[[theWindow contentView] addSubview:[_titleViewController view]];
 	}
-	if (![_slideView superview]) {
-		var frame = [[theWindow contentView] frame];
-		[_slideView setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.heigth - 48.0)];
-		[[theWindow contentView] addSubview:_slideView];
-	}
 }
 
-- (void)resizeUI{}
+- (void)resizeUI{
+	var frame = [[theWindow contentView] frame]
+	[[_titleViewController view] setFrame:CGRectMake(0.0, 0.0, frame.size.width, 48.0)];
+	[[_newsFeedViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
+	[[_newsFeedViewController newsFilterBar] resizeUI:frame];
+}
 
 @end

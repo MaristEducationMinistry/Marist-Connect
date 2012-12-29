@@ -50,9 +50,9 @@
 	[signOutLabel setAction:@selector(userShouldLogout) forTarget:self];
 	[usernameLabel setDefaultColour:[CPColor whiteColor]];
 	[usernameLabel setSecondaryColour:[CPColor blackColor]];
-	[usernameLabel setStringValue:Parse.User.current().get("username")];
+	//[usernameLabel setStringValue:Parse.User.current().get("username")];
 	[mainTitle setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/marist_connect_main_icon.png"]];
-	[changeViewButton setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/change_view_image.png"]];
+	[changeViewButton setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/toolbar_listview.png"]];
 }
 @end
 
