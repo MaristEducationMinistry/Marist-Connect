@@ -13,7 +13,6 @@
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<string>NSCustomView</string>
-			<string>NSSplitView</string>
 			<string>NSCustomObject</string>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -27,7 +26,7 @@
 		<object class="NSMutableArray" key="IBDocument.RootObjects" id="1000">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<object class="NSCustomObject" id="1001">
-				<string key="NSClassName">MCDashboardViewController</string>
+				<string key="NSClassName">MCCourseDetailsViewController</string>
 			</object>
 			<object class="NSCustomObject" id="1003">
 				<string key="NSClassName">FirstResponder</string>
@@ -35,39 +34,14 @@
 			<object class="NSCustomObject" id="1004">
 				<string key="NSClassName">NSApplication</string>
 			</object>
-			<object class="NSSplitView" id="130816146">
+			<object class="NSCustomView" id="1005">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
-				<object class="NSMutableArray" key="NSSubviews">
-					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="NSCustomView" id="1012364275">
-						<reference key="NSNextResponder" ref="130816146"/>
-						<int key="NSvFlags">256</int>
-						<string key="NSFrameSize">{304, 416}</string>
-						<reference key="NSSuperview" ref="130816146"/>
-						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="733432403"/>
-						<string key="NSReuseIdentifierKey">_NS:1165</string>
-						<string key="NSClassName">NSView</string>
-					</object>
-					<object class="NSCustomView" id="733432403">
-						<reference key="NSNextResponder" ref="130816146"/>
-						<int key="NSvFlags">256</int>
-						<string key="NSFrame">{{305, 0}, {203, 416}}</string>
-						<reference key="NSSuperview" ref="130816146"/>
-						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
-						<string key="NSReuseIdentifierKey">_NS:1167</string>
-						<string key="NSClassName">NSView</string>
-					</object>
-				</object>
-				<string key="NSFrameSize">{508, 416}</string>
+				<string key="NSFrameSize">{480, 272}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
-				<reference key="NSNextKeyView" ref="1012364275"/>
-				<string key="NSReuseIdentifierKey">_NS:1163</string>
-				<bool key="NSIsVertical">YES</bool>
-				<int key="NSDividerStyle">2</int>
+				<reference key="NSNextKeyView"/>
+				<string key="NSClassName">NSView</string>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -77,25 +51,9 @@
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">view</string>
 						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="130816146"/>
+						<reference key="destination" ref="1005"/>
 					</object>
-					<int key="connectionID">18</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">leftDashboardView</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="1012364275"/>
-					</object>
-					<int key="connectionID">19</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">rightDashboardView</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="733432403"/>
-					</object>
-					<int key="connectionID">20</int>
+					<int key="connectionID">2</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -128,24 +86,9 @@
 						<string key="objectName">Application</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">15</int>
-						<reference key="object" ref="130816146"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="1012364275"/>
-							<reference ref="733432403"/>
-						</object>
+						<int key="objectID">1</int>
+						<reference key="object" ref="1005"/>
 						<reference key="parent" ref="1002"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">16</int>
-						<reference key="object" ref="1012364275"/>
-						<reference key="parent" ref="130816146"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">17</int>
-						<reference key="object" ref="733432403"/>
-						<reference key="parent" ref="130816146"/>
 					</object>
 				</object>
 			</object>
@@ -156,14 +99,10 @@
 					<string>-1.IBPluginDependency</string>
 					<string>-2.IBPluginDependency</string>
 					<string>-3.IBPluginDependency</string>
-					<string>15.IBPluginDependency</string>
-					<string>16.IBPluginDependency</string>
-					<string>17.IBPluginDependency</string>
+					<string>1.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -182,49 +121,17 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">20</int>
+			<int key="maxID">2</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
-					<string key="className">MCDashboardViewController</string>
+					<string key="className">MCCourseDetailsViewController</string>
 					<string key="superclassName">NSViewController</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>leftDashboardView</string>
-							<string>rightDashboardView</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>NSView</string>
-							<string>NSView</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>leftDashboardView</string>
-							<string>rightDashboardView</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBToOneOutletInfo">
-								<string key="name">leftDashboardView</string>
-								<string key="candidateClassName">NSView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">rightDashboardView</string>
-								<string key="candidateClassName">NSView</string>
-							</object>
-						</object>
-					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/MCDashboardViewController.h</string>
+						<string key="minorKey">./Classes/MCCourseDetailsViewController.h</string>
 					</object>
 				</object>
 			</object>

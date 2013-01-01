@@ -50,10 +50,17 @@
 	[signOutLabel setAction:@selector(userShouldLogout) forTarget:self];
 	[usernameLabel setDefaultColour:[CPColor whiteColor]];
 	[usernameLabel setSecondaryColour:[CPColor blackColor]];
-	//[usernameLabel setStringValue:Parse.User.current().get("username")];
+	var font = [CPFont fontWithName:@"Champagne&Limousines" size:12];
+	usernameLabel._DOMElement.style.font = [font cssString];
 	[mainTitle setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/marist_connect_main_icon.png"]];
 	[changeViewButton setImage:[[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/toolbar_listview.png"]];
 }
+
+- (void)setUsername:(CPString)aUsername
+{
+	[usernameLabel setStringValue:aUsername];
+}
+
 @end
 
 //gradient view subclass
