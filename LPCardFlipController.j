@@ -94,22 +94,24 @@ var sharedCardFlipController = nil,
     endCenter = anEndCenter;
 }
  
-- (void)reverseFlipCurrentView
+- (void)reverseFlipCurrentViewInAxes:(CPString)axes
 {
-    [self flipWithView:frontView backView:backView reverse:YES];
+    [self flipWithView:frontView backView:backView reverse:YES inAxes:axes];
 }
  
-- (void)flipWithView:(id)aFrontView backView:(id)aBackView
+- (void)flipWithView:(id)aFrontView backView:(id)aBackView inAxes:(CPString)axes
 {
-    [self flipWithView:aFrontView backView:aBackView reverse:NO];
+    [self flipWithView:aFrontView backView:aBackView reverse:NO inAxes:axes];
 }
  
-- (void)flipWithView:(id)aFrontView backView:(id)aBackView reverse:(BOOL)isReverse
+- (void)flipWithView:(id)aFrontView backView:(id)aBackView reverse:(BOOL)isReverse inAxes:(CPString)axes
 {
     if (ShouldUseFlipAnimation)
     {
+    	var animationAxesString = "rotate" + axes;
+    	
         if (aBackView !== backView)
-            aBackView._DOMElement.style["-webkit-transform"] = @"rotateY(180deg)";
+            aBackView._DOMElement.style["-webkit-transform"] = animationAxesString + @"(180deg)";
     
         frontView = aFrontView;
         backView = aBackView;
@@ -185,11 +187,11 @@ var sharedCardFlipController = nil,
             [animation startAnimation];
         
             // Flip each view
-            var rotate = "rotateY(" + (isReverse ? 0 : -180) + "deg) ",
+            var rotate = animationAxesString + "(" + (isReverse ? 0 : -180) + "deg) ",
                 scale  = "scale(" + (isReverse ? 1.0 : backWidth / frontWidth) + ")";
             frontView._DOMElement.style["-webkit-transform"] = rotate + scale;
         
-            var rotate = "rotateY(" + (isReverse ? 180 : 0) + "deg) ",
+            var rotate = animationAxesString + "(" + (isReverse ? 180 : 0) + "deg) ",
                 scale  = "scale(" + (isReverse ? frontWidth / backWidth : 1.0) + ")";
             backView._DOMElement.style["-webkit-transform"] = rotate + scale;
         

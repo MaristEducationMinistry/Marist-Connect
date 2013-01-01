@@ -52,7 +52,7 @@
 	var cardFlipController = [LPCardFlipController sharedController];
     [cardFlipController setDelegate:self]; 
     [cardFlipController setStartCenter:[forgotView center] endCenter:[forgotView center]];
-    [cardFlipController flipWithView:forgotView backView:loginView];
+    [cardFlipController flipWithView:forgotView backView:loginView inAxes:"Y"];
     setTimeout(function() {[[self view] addSubview:loginView]}, 650);
 }
 
@@ -122,7 +122,7 @@
     [cardFlipController setDelegate:self];
  	[forgotView setHidden:NO];
     [cardFlipController setStartCenter:[loginView center] endCenter:[loginView center]];
-    [cardFlipController flipWithView:loginView backView:forgotView];
+    [cardFlipController flipWithView:loginView backView:forgotView inAxes:@"Y"];
     setTimeout(function() {[[self view] addSubview:forgotView]}, 650);
 }
 

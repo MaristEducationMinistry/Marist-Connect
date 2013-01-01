@@ -1,5 +1,6 @@
 @import <Foundation/Foundation.j>
 @import "MCHoveringTextField.j"
+@import "LPCardFlipController.j"
 
 @implementation MCCourseDetailsHeaderViewController : CPViewController
 {
@@ -18,6 +19,8 @@
 	CPWindow mapSheetWindow;
 	CPView mapView;
 	CPView coverView;
+	
+	id = _parseObject;
 }
 
 - (void)awakeFromCib
@@ -37,6 +40,7 @@
 	enrollmentButton = [[MCCourseHeaderButton alloc] initWithFrame:CGRectMake(489.0, 20.0, 98.0, 34.0)];
 	[enrollmentButton setAutoresizingMask: CPViewNotSizable | CPViewMaxYMargin | CPViewMinXMargin];
 	[enrollmentButton setFrameOrigin:CGPointMake([[self view] frame].size.width - 20.0 - 98.0, 20.0)];
+	[enrollmentButton setDelegate:self];
 	[[self view] addSubview:enrollmentButton];
 	
 	[[self view] setBackgroundColor:[CPColor colorWithPatternImage: [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/debut_dark.png"]]];
@@ -90,12 +94,18 @@
 
 - (void)viewTravelDetails
 {
-
+	
 }
 
 - (void)viewTeacherAbsences
 {
 
+}
+
+- (void)setCourseObject:(id)parseObject
+{
+	_parseObject = parseObject;
+	
 }
 	
 - (void)setCourseName:(CPString)aCourseName
@@ -145,6 +155,7 @@
 	CPImage _enrollImage_hover;
 	
 	BOOL _isEnrolled;
+	id _delegate;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -162,6 +173,11 @@
 	return self;
 }
 
+- (void)setDelegate:(id)aDelegate
+{
+	_delegate = aDelegate;
+}
+
 - (void)setIsEnrolled:(BOOL)aState
 {
 	if (aState) {
@@ -174,7 +190,14 @@
 - (void)mouseDown:(CPEvent)aEvent
 {
 	if (_isEnrolled) {
-		[self setImage:_unenrollImage_down];
+		if ([self image] == _unenrollImage) {
+			[self setImage:_unenrollImage_down];
+			var cardFlipController = [LPCardFlipController sharedController];
+			[cardFlipController setDelegate:self]; 
+			[cardFlipController setStartCenter:[self center] endCenter:[self center]];
+			[cardFlipController flipWithView:self backView:[self superview] inAxes:"X"];
+			setTimeout(function() {[[self superview] addSubview:loginView]}, 650);
+		}
 	} else {
 		[self setImage:_enrollImage_down];
 	}
@@ -183,7 +206,9 @@
 - (void)mouseUp:(CPEvent)aEvent
 {
 	if (_isEnrolled) {
-		[self setImage:_unenrollImage];
+		if ([self image] == _unenrollImage_down) {
+			[self setImage:_unenrollImage];
+		}
 	} else {
 		[self setImage:_enrollImage];
 	}
@@ -191,15 +216,19 @@
 
 - (void)mouseEntered:(CPEvent)aEvent
 {
-	if (_isEnrolled) {
-		[self setImage:_unenrollImage];
-	} else {
-		[self setImage:_enrollImage_hover];
-	}
+	window.mouseHoverInt = setInterval(function() {
+		if (_isEnrolled) {
+			[self setImage:_unenrollImage];
+		} else {
+			[self setImage:_enrollImage_hover];
+		}
+		window.clearInterval(window.mouseHoverInt);
+	}, 500);
 }
 
 - (void)mouseExited:(CPEvent)aEvent
 {
+	try {window.clearInterval(window.mouseHoverInt);} catch(exp) {var x =0}
 	if (_isEnrolled) {
 		[self setImage:_enrolledImage];
 	} else {
