@@ -14,6 +14,7 @@
 @import "MCDashboardViewController.j"
 @import "MCNewsFeedViewController.j"
 @import <LPKit/LPSlideView.j>
+@import "MCTermsAndConditionsViewController.j"
 
 @import "SLListView.j"
 @import "SLListViewCell.j"
@@ -23,11 +24,14 @@
 @implementation AppController : CPObject
 {
 	CPWindow theWindow;
+	CPWindow tocWindow;
+	
 	MCLoginViewController _loginViewController;
 	MCTitleViewController _titleViewController;
 	LPSlideView _slideView;
 	MCDashboardViewController _dashboardViewController;
 	MCNewsFeedViewController _newsFeedViewController;
+	MCTermsAndConditions _termsAndConditionsViewController;
 	
 	id cookieController;
 	
@@ -55,9 +59,15 @@
     [[_titleViewController view] setFrameOrigin:CGPointMake(0.0,0.0)];
     [_titleViewController setDelegate:self];
     
+    //create the toc page
+    tocWindow = [[CPWindow alloc] initWithContentRect:CGRectMake(0.0, 0.0, 550.0, 335.0) styleMask:CPDocModalWindowMask];
+    _termsAndConditionsViewController = [[MCTermsAndConditionsViewController alloc] initWithCibName:@"MCTermsAndConditionsViewController" bundle:nil];
+    [tocWindow setContentView:[_termsAndConditionsViewController view]];
+    
+    
     //create the newsfeed
     _newsFeedViewController = [[MCNewsFeedViewController alloc] initWithCibName:@"MCNewsFeedViewController" bundle:nil];
-    [[_newsFeedViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)]
+    [[_newsFeedViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
     
     
     //create the dashboard
@@ -74,7 +84,7 @@
 	cookieController = [LPCookieController sharedCookieController];
 	if ([cookieController valueForKey:@"keepLoggedIn"] == "true" && Parse.User.current()) {
 		// goto news feed.
-		[self gotoNewsFeed];
+		[self userDidLogIn];
 	} else {
 		// goto the login view
 		[self gotoLoginView];
@@ -109,19 +119,44 @@
 // delegate callback when the login view completes
 - (void)userDidLogIn
 {
-	// remove the login view from the content view
+	[[theWindow contentView] addSubview:[_dashboardViewController view]];
 	[[_loginViewController view] removeFromSuperview];
-	[self gotoNewsFeed]
-	// move to the main dashboard
+	[self gotoNewsFeed];
+	var toc = Parse.Object.extend("TermsAndConditions");
+	var tocVerQuery = new Parse.Query(toc);
+	tocVerQuery.descending("version");
+	tocVerQuery.first( {
+		success: function(currentVersion) {
+			var userTocVer = Parse.User.current().get("toc");
+			if (userTocVer == 0 || userTocVer < currentVersion.get("version")) {
+					[_termsAndConditionsViewController setVersion:currentVersion.get("version")];
+					[self showTOC];
+			} else {
+				// remove the login view from the content view
+				[[_loginViewController view] removeFromSuperview];
+				[[theWindow contentView] addSubview:[_dashboardViewController view]];
+				[self gotoNewsFeed]
+				// move to the main dashboard
+			}
+		},
+		error: function(ver, error) {
+			alert(error.message);
+		}
+	});
+}
+
+- (void)showTOC
+{
+	var frame = [theWindow frame];
+	tocCoverView = [_termsAndConditionsViewController overView:frame];
+	[[theWindow contentView] addSubview:tocCoverView];
+	[[CPApplication sharedApplication] beginSheet:tocWindow modalForWindow:theWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
 }
 
 - (void)logOutUser
 {
 	Parse.User.logOut();
-	[[_titleViewController view] removeFromSuperview];
-	[_slideView removeFromSuperview];
-	[_holdingView removeFromSuperview];
-	[[theWindow contentView] addSubview:[_loginViewController view]];
+	[self gotoLoginView];
 }
 
 -(void) gotoLoginView 
@@ -158,6 +193,8 @@
 		var frame = [[theWindow contentView] frame];
 		[[_titleViewController view] setFrameSize:CGSizeMake(frame.size.width ,48)];
 		[[_titleViewController view] setFrameOrigin:CGPointMake(0.0,0.0)];
+		var username = Parse.User.current().get("username");
+		[_titleViewController setUsername:username];
 		[[theWindow contentView] addSubview:[_titleViewController view]];
 	}
 }
@@ -167,6 +204,8 @@
 	[[_titleViewController view] setFrame:CGRectMake(0.0, 0.0, frame.size.width, 48.0)];
 	[[_newsFeedViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
 	[[_newsFeedViewController newsFilterBar] resizeUI:frame];
+	[[_dashboardViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
+	[_dashboardViewController resizeUI:frame];
 }
 
 @end
