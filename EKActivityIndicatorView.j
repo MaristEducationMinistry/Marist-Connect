@@ -20,7 +20,7 @@
         _shouldUseCSS   = NO;
 
         [self setColor:[CPColor blackColor]];
-        [self setUseCSS:YES];
+        //[self setUseCSS:YES];
     }
     return self;
 }
