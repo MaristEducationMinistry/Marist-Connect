@@ -5,6 +5,7 @@
 @implementation MCCourseDetailsHeaderViewController : CPViewController
 {
 	MCCourseHeaderButton enrollmentButton;
+	MCCourseConfirmButton enrollConfirmButton;
 	@outlet CPTextField courseNameLabel;
 	@outlet CPTextField courseDateRangeLabel;
 	
@@ -43,6 +44,13 @@
 	[enrollmentButton setDelegate:self];
 	[[self view] addSubview:enrollmentButton];
 	
+	/*
+enrollConfirmButton = [[MCCourseConfirmButton] initWithFrame:CGRectMake(489.0, 20.0, 98.0, 34.0)];
+	[enrollConfirmButton setAutoresizingMask: CPViewNotSizable | CPViewMaxYMargin | CPViewMinXMargin];
+	[enrollConfirmButton setFrameOrigin:CGPointMake([[self view] frame].size.width - 20.0 - 98.0, 20.0)];
+	[enrollConfirmButton setDelegate:self];
+*/
+	
 	[[self view] setBackgroundColor:[CPColor colorWithPatternImage: [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/debut_dark.png"]]];
 	[[self view] setAutoresizingMask: CPViewMaxYMargin];
 }
@@ -55,9 +63,10 @@
 	coverView = [[CPView alloc] initWithFrame:CGRectMake(0.0, 0.0, frame.size.width, frame.size.height)];
 	[coverView setBackgroundColor:[CPColor colorWithRed:0 green:0 blue:0 alpha:0.7]];
 	var windowView = [[CPView alloc] initWithFrame:CGRectMake(0.0, 0.0, 800.0, 600.0)];
-	[windowView setBackgroundColor:[CPColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.1]];
+	[windowView setBackgroundColor:[CPColor clearColor]];
 	mapSheetWindow = [[CPWindow alloc] initWithContentRect:CGRectMake(0.0, 0.0, 800.0, 600.0) styleMask:CPDocModalWindowMask];
-	mapView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, 788.0, 588.0)];
+	mapView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, 800.0, 600.0)];
+	[mapView setBackgroundColor:[CPColor clearColor]]
     var mapOptions = {
     	center: new google.maps.LatLng(-34.397, 150.644),
         zoom: 16,
@@ -78,10 +87,11 @@
         	alert("Geocode was not successful for the following reason: " + status);
         }
     });
-    var closeButton = [[MCMapCloseButton alloc] initWithFrame:CGRectMake(776.0, 576.0, 24.0, 24.0) forTarget:self];
+    var closeButton = [[MCMapCloseButton alloc] initWithFrame:CGRectMake(frame.size.width - ((frame.size.width - 800) /2) - 24.0, 580.0, 24.0, 24.0) forTarget:self];
 	[mapSheetWindow setContentView:windowView];
+	[mapSheetWindow setBackgroundColor:[CPColor clearColor]];
 	[[mapSheetWindow contentView] addSubview:mapView];
-	[[mapSheetWindow contentView] addSubview:closeButton];
+	[coverView addSubview:closeButton];
 	[contentView addSubview:coverView];
 	[[CPApplication sharedApplication] beginSheet:mapSheetWindow modalForWindow:[contentView window] modalDelegate:self didEndSelector:nil contextInfo:nil];
 }
@@ -118,10 +128,24 @@
 	[courseDateRangeLabel setStringValue:aDateRange];
 }
 
+- (void)unenrollButtonClicked
+{
+	var cardFlipController = [LPCardFlipController sharedController];
+	[cardFlipController setDelegate:self]; 
+	[cardFlipController setStartCenter:[enrollmentButton center] endCenter:[enrollmentButton center]];
+	[cardFlipController flipWithView:enrollmentButton backView:enrollConfirmButton inAxes:"X"];
+	setTimeout(function() {[[self view] addSubview:enrollConfirmButton]}, 650);
+}
+
 @end
 
+//map closing button
 @implementation MCMapCloseButton : CPImageView
 {
+	CPImage _default;
+	CPImage _hover;
+	CPImage _click;
+
 	id _target;
 }
 
@@ -131,20 +155,37 @@
 	
 	if (self) {
 		_target = aTarget;
-		var image = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/sheet_close_button.png"];
-		[self setImage:image];
+		_default = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/sheet_close_button.png"];
+		_hover = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/sheet_close_button.png"];
+		_click = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/sheet_close_button.png"];
+		[self setImage:_default];
+		self._DOMElement.addEventListener("click", function() {[self mouseDown];}, false); 
+		self._DOMElement.addEventListener("mouseover", function() {[self mouseEntered];}, false); 
+		self._DOMElement.addEventListener("mouseout", function() {[self mouseExited];}, false); 
 	}
 	
 	return self;
 }
 
-- (void)mouseDown:(CPEvent)aEvent
+- (void)mouseDown
 {
+	[self setImage:_click];
 	[_target closeMap];
+}
+
+- (void)mouseEntered
+{
+	[self setImage:_hover];
+}
+
+- (void)mouseExited
+{
+	[self setImage:_default];
 }
 
 @end
 
+//course enrollment button
 @implementation MCCourseHeaderButton : CPImageView
 {
 	CPImage _enrolledImage;
@@ -163,11 +204,13 @@
 	self = [super initWithFrame:frame];
 	
 	if (self) {
-		_isEnrolled = true;
+		_isEnrolled = false;
 		_enrolledImage = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/enrolled_button.png"];
 		_enrollImage = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/enrol_button.png"];
 		_unenrollImage = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/un_enrol_button.png"]
-		[self setImage:_enrolledImage];
+		_enrollImage_hover = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/enrol_button_hover.png"];
+		_enrollImage_down = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/enrol_button_clicked.png"];
+		[self setImage:_enrollImage];
 	}
 	
 	return self;
@@ -192,11 +235,7 @@
 	if (_isEnrolled) {
 		if ([self image] == _unenrollImage) {
 			[self setImage:_unenrollImage_down];
-			var cardFlipController = [LPCardFlipController sharedController];
-			[cardFlipController setDelegate:self]; 
-			[cardFlipController setStartCenter:[self center] endCenter:[self center]];
-			[cardFlipController flipWithView:self backView:[self superview] inAxes:"X"];
-			setTimeout(function() {[[self superview] addSubview:loginView]}, 650);
+			[_delegate unenrollButtonClicked];
 		}
 	} else {
 		[self setImage:_enrollImage_down];
@@ -210,20 +249,22 @@
 			[self setImage:_unenrollImage];
 		}
 	} else {
-		[self setImage:_enrollImage];
+		[self setImage:_enrollImage_hover];
 	}
 }
 
 - (void)mouseEntered:(CPEvent)aEvent
 {
+	if (_isEnrolled) {
 	window.mouseHoverInt = setInterval(function() {
 		if (_isEnrolled) {
 			[self setImage:_unenrollImage];
-		} else {
-			[self setImage:_enrollImage_hover];
 		}
 		window.clearInterval(window.mouseHoverInt);
 	}, 500);
+	} else {
+		[self setImage:_enrollImage_hover];
+	}
 }
 
 - (void)mouseExited:(CPEvent)aEvent
@@ -232,8 +273,53 @@
 	if (_isEnrolled) {
 		[self setImage:_enrolledImage];
 	} else {
-		[self setImage:_enrollImage_hover];
+		[self setImage:_enrollImage];
 	}
+}
+
+@end
+
+//course enrollment confirmation button
+@implementation MCCourseConfirmButton : CPImageView
+{
+	BOOL _isEnrolled;
+	id _delegate;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+	self = [super initWithFrame:frame];
+	
+	if (self) {
+		
+	}
+	
+	return self;
+}
+
+- (void)setDelegate:(id)aDelegate
+{
+	_delegate = aDelegate;
+}
+
+- (void)mouseDown:(CPEvent)aEvent
+{
+	
+}
+
+- (void)mouseUp:(CPEvent)aEvent
+{
+	
+}
+
+- (void)mouseEntered:(CPEvent)aEvent
+{
+	
+}
+
+- (void)mouseExited:(CPEvent)aEvent
+{
+	
 }
 
 @end
