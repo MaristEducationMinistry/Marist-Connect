@@ -53,7 +53,7 @@ enrollConfirmButton = [[MCCourseConfirmButton] initWithFrame:CGRectMake(489.0, 2
 	[enrollConfirmButton setDelegate:self];
 */
 	
-	[[self view] setBackgroundColor:[CPColor colorWithPatternImage: [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/debut_dark.png"]]];
+	[[self view] setBackgroundColor:[CPColor colorWithPatternImage: [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/course_details_background.png"]]];
 	[[self view] setAutoresizingMask: CPViewMaxYMargin];
 }
 

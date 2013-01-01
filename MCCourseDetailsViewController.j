@@ -35,7 +35,6 @@
 
 - (void)resizeUI:(CGRect)frame
 {
-	window.console.log(frame);
 	[[self view] setFrame:CGRectMake(0.0, 0.0, frame.size.width, frame.size.height)];
 	
 	[[_detailsHeader view] setFrameOrigin:CGPointMake(0.0, 0.0)];
