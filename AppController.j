@@ -15,6 +15,7 @@
 @import "MCNewsFeedViewController.j"
 @import <LPKit/LPSlideView.j>
 @import "MCTermsAndConditionsViewController.j"
+@import "MCSharedData.j"
 
 @import "SLListView.j"
 @import "SLListViewCell.j"
@@ -75,8 +76,8 @@
     [[_dashboardViewController view] setFrame:CGRectMake(0.0, 48.0, frame.size.width, frame.size.height - 48.0)];
     [_dashboardViewController layoutSubviews];
     
-    //add dashboard to contentview
-    [[theWindow contentView] addSubview:[_dashboardViewController view]];
+    //add dashboard/newsfeed to contentview
+    
     
 	[[CPNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeUI) name:@"CPWindowDidResizeNotification" object:nil];
 	
@@ -84,7 +85,10 @@
 	cookieController = [LPCookieController sharedCookieController];
 	if ([cookieController valueForKey:@"keepLoggedIn"] == "true" && Parse.User.current()) {
 		// goto news feed.
-		[self userDidLogIn];
+		Parse.User.current().fetch( {
+			success: function(user) {
+				 [self userDidLogIn];
+			}});
 	} else {
 		// goto the login view
 		[self gotoLoginView];
@@ -119,7 +123,15 @@
 // delegate callback when the login view completes
 - (void)userDidLogIn
 {
+	var data = [MCSharedData sharedCentre];
+	[data setTarget:self];
+	[data gatherSharedData];
+}
+
+- (void)dataIsCollected
+{
 	[[theWindow contentView] addSubview:[_dashboardViewController view]];
+    [[theWindow contentView] addSubview:[_newsFeedViewController view]];
 	[[_loginViewController view] removeFromSuperview];
 	[self gotoNewsFeed];
 	var toc = Parse.Object.extend("TermsAndConditions");
@@ -129,7 +141,7 @@
 		success: function(currentVersion) {
 			var userTocVer = Parse.User.current().get("toc");
 			if (userTocVer == 0 || userTocVer < currentVersion.get("version")) {
-					[_termsAndConditionsViewController setVersion:currentVersion.get("version")];
+					[_termsAndConditionsViewController setVersion:currentVersion target:self];
 					[self showTOC];
 			} else {
 				// remove the login view from the content view

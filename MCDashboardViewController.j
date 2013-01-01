@@ -27,12 +27,6 @@
 	[leftDashboardView addSubview:[_courseSelectionViewController view]];
 }
 
-- (void)courseSelectionHasChanged:(id)parseObject
-{
-	_currentCourseObject = parseObject;
-	[_courseDetailsViewController setCourseName:_currentCourseObject.get("name")];
-}
-
 - (void)resizeUI:frame
 {
 	[_currentCourseController resizeUI:[rightDashboardView frame]];
@@ -78,7 +72,7 @@
 	[_courseDetailsViewController resizeUI:[rightView frame]];
 }
 
-- (void)courseSelectionHasChanged:(id)courseObject
+- (void)courseSelectionHasChanged:(id)courseObject enrolled:(int)aStatus
 {
 	var viewController = [_cachedCourseControllers objectForKey:courseObject.get("objectId")];
 	if (!viewController) {
@@ -91,7 +85,7 @@
 		[rightDashboardView replaceSubview:[_currentCourseController view] with:[viewController view]];
 		_currentCourseController = viewController;
 	}
-	[_currentCourseController setCourseObject:courseObject];
+	[_currentCourseController setCourseObject:courseObject status:aStatus];
 	_currentCourseObject = courseObject;
 	[self resizeUI:[[self view] frame]];
 }

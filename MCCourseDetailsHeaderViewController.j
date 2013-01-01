@@ -1,6 +1,7 @@
 @import <Foundation/Foundation.j>
 @import "MCHoveringTextField.j"
 @import "LPCardFlipController.j"
+@import "MCSharedData.j"
 
 @implementation MCCourseDetailsHeaderViewController : CPViewController
 {
@@ -21,7 +22,8 @@
 	CPView mapView;
 	CPView coverView;
 	
-	id = _parseObject;
+	id  _parseObject;
+	int _status; 
 }
 
 - (void)awakeFromCib
@@ -62,9 +64,9 @@ enrollConfirmButton = [[MCCourseConfirmButton] initWithFrame:CGRectMake(489.0, 2
 	var frame = [contentView frame];
 	coverView = [[CPView alloc] initWithFrame:CGRectMake(0.0, 0.0, frame.size.width, frame.size.height)];
 	[coverView setBackgroundColor:[CPColor colorWithRed:0 green:0 blue:0 alpha:0.7]];
-	var windowView = [[CPView alloc] initWithFrame:CGRectMake(0.0, 0.0, 800.0, 600.0)];
+	var windowView = [[CPView alloc] initWithFrame:CGRectMake(0.0, 0.0, 800.0, 550.0)];
 	[windowView setBackgroundColor:[CPColor clearColor]];
-	mapSheetWindow = [[CPWindow alloc] initWithContentRect:CGRectMake(0.0, 0.0, 800.0, 600.0) styleMask:CPDocModalWindowMask];
+	mapSheetWindow = [[CPWindow alloc] initWithContentRect:CGRectMake(0.0, 0.0, 800.0, 550.0) styleMask:CPDocModalWindowMask];
 	mapView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, 800.0, 600.0)];
 	[mapView setBackgroundColor:[CPColor clearColor]]
     var mapOptions = {
@@ -87,7 +89,7 @@ enrollConfirmButton = [[MCCourseConfirmButton] initWithFrame:CGRectMake(489.0, 2
         	alert("Geocode was not successful for the following reason: " + status);
         }
     });
-    var closeButton = [[MCMapCloseButton alloc] initWithFrame:CGRectMake(frame.size.width - ((frame.size.width - 800) /2) - 24.0, 580.0, 24.0, 24.0) forTarget:self];
+    var closeButton = [[MCMapCloseButton alloc] initWithFrame:CGRectMake(frame.size.width - ((frame.size.width - 800) /2) - 96.0, 502.0, 98.0, 31.0) forTarget:self];
 	[mapSheetWindow setContentView:windowView];
 	[mapSheetWindow setBackgroundColor:[CPColor clearColor]];
 	[[mapSheetWindow contentView] addSubview:mapView];
@@ -112,8 +114,16 @@ enrollConfirmButton = [[MCCourseConfirmButton] initWithFrame:CGRectMake(489.0, 2
 
 }
 
-- (void)setCourseObject:(id)parseObject
+- (void)setCourseObject:(id)parseObject status:(int)aStatus
 {
+	_status = aStatus;
+	if (aStatus == 0) {
+		[enrollmentButton setIsEnrolled:NO];
+	} else if (aStatus == 1) {
+		[enrollmenrButton setIsEnrolled:YES];
+	} else {
+		[enrollmentButton setHidden:YES];
+	}
 	_parseObject = parseObject;
 	
 }
@@ -130,11 +140,25 @@ enrollConfirmButton = [[MCCourseConfirmButton] initWithFrame:CGRectMake(489.0, 2
 
 - (void)unenrollButtonClicked
 {
-	var cardFlipController = [LPCardFlipController sharedController];
-	[cardFlipController setDelegate:self]; 
-	[cardFlipController setStartCenter:[enrollmentButton center] endCenter:[enrollmentButton center]];
-	[cardFlipController flipWithView:enrollmentButton backView:enrollConfirmButton inAxes:"X"];
-	setTimeout(function() {[[self view] addSubview:enrollConfirmButton]}, 650);
+	if (_status == 0) {
+		//enroll
+		var temp = [[MCSharedData sharedCentre] pClass];
+		temp.relation("attendingCourses").add(_parseObject)
+		temp.save(null, {
+			success: function(user) {
+				[enrollmentButton setIsEnrolled:YES];
+			},
+			error: function(user, error) {
+				alert(error.message);
+			}
+		});
+	} else {
+		var cardFlipController = [LPCardFlipController sharedController];
+		[cardFlipController setDelegate:self]; 
+		[cardFlipController setStartCenter:[enrollmentButton center] endCenter:[enrollmentButton center]];
+		[cardFlipController flipWithView:enrollmentButton backView:enrollConfirmButton inAxes:"X"];
+		setTimeout(function() {[[self view] addSubview:enrollConfirmButton]}, 650);
+	}
 }
 
 @end
@@ -155,9 +179,9 @@ enrollConfirmButton = [[MCCourseConfirmButton] initWithFrame:CGRectMake(489.0, 2
 	
 	if (self) {
 		_target = aTarget;
-		_default = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/sheet_close_button.png"];
-		_hover = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/sheet_close_button.png"];
-		_click = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/sheet_close_button.png"];
+		_default = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/map_close_button.png"];
+		_hover = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/map_close_button_hover.png"];
+		_click = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/map_close_button_clicked.png"];
 		[self setImage:_default];
 		self._DOMElement.addEventListener("click", function() {[self mouseDown];}, false); 
 		self._DOMElement.addEventListener("mouseover", function() {[self mouseEntered];}, false); 
@@ -223,6 +247,7 @@ enrollConfirmButton = [[MCCourseConfirmButton] initWithFrame:CGRectMake(489.0, 2
 
 - (void)setIsEnrolled:(BOOL)aState
 {
+	_isEnrolled = aState;
 	if (aState) {
 		[self setImage:_enrolledImage];
 	} else {
@@ -239,6 +264,7 @@ enrollConfirmButton = [[MCCourseConfirmButton] initWithFrame:CGRectMake(489.0, 2
 		}
 	} else {
 		[self setImage:_enrollImage_down];
+		[_delegate unenrollButtonClicked];
 	}
 }
 

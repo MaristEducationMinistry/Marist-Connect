@@ -18,8 +18,8 @@
 	MCFilterView filterView;
 	CPScrollView scrollView;
 	 
-	@outlet EKActivityIndicatorView progressView;
-	@outlet CPImageView emptyImage;
+	EKActivityIndicatorView progressView;
+	CPImageView emptyImage;
 	 
 	@outlet MCCourseHeaderView listHeaderView;
 	@outlet MCCourseCellView listCellView;
@@ -27,7 +27,7 @@
 	SLListView _listView;
 	 
 	CPArray _availableCourses;
-	CPArray _currentCourses;
+	CPArray _enrolledCourses;
 	CPArray _pastCourses;
 	 
 	CPArray _currentDataSource;
@@ -36,6 +36,7 @@
 	CPString _userClassname;
 	id _delegate;
 	 
+	 int _type;
 	CPArray data;
 }
  
@@ -93,6 +94,12 @@
     //create the progress view
     progressView = [[EKActivityIndicatorView alloc] initWithFrame:CGRectMake(126.0, (frame.size.height - 49.0) / 2, 48.0, 48.0)];
     
+    //empty image
+    emptyImage = [[CPImageView alloc] initWithFrame:CGRectMake(66.0, (frame.size.height - 54.0) / 2, 168.0, 58.0)];
+    var image = [[CPImage alloc] initWithContentsOfFile:@"Image\ Resources/no_course_here.png"];
+    [emptyImage setImage:image];
+    [emptyImage setHidden:YES];
+    
     [_listView setGradientHighlightColors:[CPArray arrayWithObjects: col1, col2, nil]];
     [scrollView setDocumentView:_listView];
     [scrollView flashScrollers];
@@ -101,6 +108,7 @@
 	[[self view] addSubview:filterView];
 	[[self view] addSubview:scrollView];
 	[[self view] addSubview:progressView];
+	[[self view] addSubview:emptyImage];
 }
  
 -(void) setCurrentDataSource:(CPString) arrayString {
@@ -111,9 +119,14 @@
 	
 	// make sure the progress indicator and empty image are hidden
 	[progressView startAnimating];
+	[emptyImage setHidden:YES];
 	 
 	if (arrayString == @"avaliableCourse") {
 		var array = _availableCourses;
+	} else if (arrayString == @"enrolledCourse") {
+		var array = _enrolledCourses;
+	} else {
+		var array = _pastCourses;
 	}
 	 
 	// check the condition of the new data and handle it apropiatly
@@ -187,19 +200,25 @@
 			    	alert("Error: " + error.code + " " + error.message);
 			    }
 			});
+		} else if (arrayString == @"enrolledCourse") {
+			[progressView stopAnimating];
+			[emptyImage setHidden:NO];
+		} else {
+			[progressView stopAnimating];
+			[emptyImage setHidden:NO];
 		}
 	 } else if ([array count] == 0) {
 		 // there are no courses in this set, display the empty image
 		 alert("empty");
 		 [progressView stopAnimating];
+		 [emptyImage setHidden:NO];
 	 } else {
 		 // this data is good to go
 		 _currentDataSource = array;
 		 [_listView reloadData];
 		 [progressView stopAnimating];
-	 }
-	 
-	}
+	 }	 
+}
  
  // list view delegate
  
@@ -264,10 +283,13 @@
 -(void) filterBar:(MCFilterView)view itemSelectedWithIdentifier:(CPString)identifier {
 	if ([identifier isEqualToString: @"Available"]) {
 		[self setCurrentDataSource:@"avaliableCourse"];
-	} else if ([identifier isEqualToString: @"Completed"]) {
-		[self setCurrentDataSource:_currentCourses];
+		_type = 0;
+	} else if ([identifier isEqualToString: @"Enrolled"]) {
+		[self setCurrentDataSource:@"enrolledCourse"];
+		_type = 1;
 	} else {
-		[self setCurrentDataSource:_pastCourses];
+		[self setCurrentDataSource:@"pastCourse"];
+		_type = 2;
 	}
 }
 
@@ -289,7 +311,7 @@
 
 - (void)listviewSelectionDidChange:(id)aListView
 {
-	[_delegate courseSelectionHasChanged:[_currentDataSource objectAtIndex:[aListView _clickedRow]]];
+	[_delegate courseSelectionHasChanged:[_currentDataSource objectAtIndex:[aListView _clickedRow]] enrolled:_type];
 }
 
  @end

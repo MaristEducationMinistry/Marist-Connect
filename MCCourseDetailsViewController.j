@@ -26,10 +26,11 @@
 	[[self view] addSubview:_personTypeFilterView];
 }
 
-- (void)setCourseObject:(id)course
+- (void)setCourseObject:(id)course status:(int)aStatus
 {
 	_course = course;
 	[_detailsHeader setCourseName:_course.get("name")];
+	[_detailsHeader setCourseObject:course status:aStatus];
 }
 
 - (void)resizeUI:(CGRect)frame
