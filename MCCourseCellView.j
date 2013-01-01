@@ -34,8 +34,9 @@
 
 -(void) setRepresentedObject:(id)aRepresentedObject {
 	[super setRepresentedObject:aRepresentedObject];
-	//[courseTypeLabel setStringValue:[aRepresentedObject text]];
-	//[courseCountLabel setStringValue:[aRepresentedObject count]];
+	if (aRepresentedObject) {
+		[courseNameLabel setStringValue:aRepresentedObject.get("name")];
+	}
 }
 
 @end

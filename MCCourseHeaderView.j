@@ -48,8 +48,8 @@
 
 -(void) setRepresentedObject:(id)aRepresentedObject {
 	[super setRepresentedObject:aRepresentedObject];
-	//[courseTypeLabel setStringValue:[aRepresentedObject text]];
-	//[courseCountLabel setStringValue:[aRepresentedObject count]];
+	[courseTypeLabel setStringValue:[aRepresentedObject text]];
+	[courseCountLabel setStringValue:[aRepresentedObject count]];
 }
  
 @end
@@ -58,6 +58,18 @@
 {
 	CPString _text;
 	int _count;
+}
+
+- (id)initWithTitle:(CPString)aTitle count:(int)aCount
+{
+	self = [super init];
+	
+	if (self) {
+		_text = aTitle;
+		_count = aCount;
+	}
+	
+	return self;
 }
 
 - (CPString)text

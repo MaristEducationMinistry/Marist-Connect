@@ -35,7 +35,7 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
     int            		_numberOfRows;
     CPMutableArray      _cachedViews;
     
-    int           		_clickedRow;
+    int           		_clickedRow @accessors;
     CPIndexSet          _selectedRowIndexes;
     
     BOOL                _allowsMultipleSelection;
@@ -154,7 +154,7 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 	var nextYPosition = 0;
 	var width = [self frame].size.width;
 	
-	if (_numberOfRows != 0 || _numberOfRows != nil) {
+	if (_numberOfRows != 0 && _numberOfRows != nil) {
 		for (var i = 0; i != _numberOfRows; i++) {
 		var heightOfRow = [_dataSource listview:self heightForRow:i];
 		var view = [_dataSource listview:self viewForRow:i];
@@ -168,7 +168,6 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 		[view setFrame:CGRectMake(0, nextYPosition, width, heightOfRow)];
 		[view setAutoresizingMask:CPViewWidthSizable];
 		[view setSelected:NO];
-		
 		[self addSubview:view];
 		[view setNeedsDisplay:YES];
 		nextYPosition += heightOfRow;
@@ -177,6 +176,7 @@ var SLListViewDelegate_selectionShouldChangeInListview_ = 1 << 0,
 		
 	var width = [[self superview] frame].size.width;
 	[self setFrameSize: CGSizeMake(width, nextYPosition)];
+	[self setNeedsDisplay:YES];
 }
 
 -(void) rowRecievedEvent:(SLListViewCell)aCell {
